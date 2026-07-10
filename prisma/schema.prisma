@@ -7,16 +7,15 @@ generator client {
 }
 
 model User {
-  id           Int       @id @default(autoincrement())
+  id           String    @id @default(uuid())
   name         String
   email        String    @unique
   passwordHash String    @map("password_hash")
-  role         String    // "CUSTOMER", "SELLER", "ADMIN"
+  role         String    @default("CUSTOMER")
   createdAt    DateTime  @default(now()) @map("created_at")
   updatedAt    DateTime  @updatedAt @map("updated_at")
   deletedAt    DateTime? @map("deleted_at")
-
-  products     Product[]
+  carts        Cart[]
   orders       Order[]
 
   @@map("users")
@@ -25,57 +24,75 @@ model User {
 model Category {
   id        Int       @id @default(autoincrement())
   name      String    @unique
+  slug      String    @unique
+  products  Product[]
   createdAt DateTime  @default(now()) @map("created_at")
   updatedAt DateTime  @updatedAt @map("updated_at")
-
-  products  Product[]
 
   @@map("categories")
 }
 
 model Product {
-  id          Int       @id @default(autoincrement())
-  sellerId    Int       @map("seller_id")
-  categoryId  Int       @map("category_id")
-  title       String
-  description String?
+  id          Int         @id @default(autoincrement())
+  name        String
+  description String      @default("")
   price       Float
-  stock       Int       @default(0)
-  imageUrl    String?   @map("image_url")
-  createdAt   DateTime  @default(now()) @map("created_at")
-  updatedAt   DateTime  @updatedAt @map("updated_at")
-  deletedAt   DateTime? @map("deleted_at")
-
-  seller      User      @relation(fields: [sellerId], references: [id], onDelete: Restrict)
-  category    Category  @relation(fields: [categoryId], references: [id], onDelete: Restrict)
+  stock       Int         @default(0)
+  image       String      @default("sem-foto.jpg")
+  categoryId  Int         @map("category_id")
+  category    Category    @relation(fields: [categoryId], references: [id])
+  createdAt   DateTime    @default(now()) @map("created_at")
+  updatedAt   DateTime    @updatedAt @map("updated_at")
+  cartItems   CartItem[]
   orderItems  OrderItem[]
 
   @@map("products")
 }
 
-model Order {
-  id          Int         @id @default(autoincrement())
-  customerId  Int         @map("customer_id")
-  status      String      // "PENDING", "PAID", "SHIPPED", "CANCELLED"
-  totalAmount Float       @map("total_amount")
-  createdAt   DateTime    @default(now()) @map("created_at")
-  updatedAt   DateTime    @updatedAt @map("updated_at")
+model Cart {
+  id        String     @id @default(uuid())
+  userId    String     @unique @map("user_id")
+  user      User       @relation(fields: [userId], references: [id])
+  items     CartItem[]
+  createdAt DateTime   @default(now()) @map("created_at")
+  updatedAt DateTime   @updatedAt @map("updated_at")
 
-  customer    User        @relation(fields: [customerId], references: [id], onDelete: Restrict)
-  items       OrderItem[]
+  @@map("carts")
+}
+
+model CartItem {
+  id        String   @id @default(uuid())
+  cartId    String   @map("cart_id")
+  cart      Cart     @relation(fields: [cartId], references: [id], onDelete: Cascade)
+  productId Int      @map("product_id")
+  product   Product  @relation(fields: [productId], references: [id])
+  quantity  Int      @default(1)
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("cart_items")
+}
+
+model Order {
+  id         String      @id @default(uuid())
+  userId     String      @map("user_id")
+  user       User        @relation(fields: [userId], references: [id])
+  totalPrice Float       @map("total_price")
+  status     String      @default("PENDING") // PENDING, PAID, CANCELED
+  createdAt  DateTime    @default(now()) @map("created_at")
+  items      OrderItem[]
 
   @@map("orders")
 }
 
 model OrderItem {
-  id        Int      @id @default(autoincrement())
-  orderId   Int      @map("order_id")
-  productId Int?     @map("product_id")
-  quantity  Int
-  unitPrice Float    @map("unit_price")
-
+  id        String   @id @default(uuid())
+  orderId   String   @map("order_id")
   order     Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
-  product   Product? @relation(fields: [productId], references: [id], onDelete: SetNull)
+  productId Int      @map("product_id")
+  product   Product  @relation(fields: [productId], references: [id])
+  quantity  Int
+  priceAtPurchase Float @map("price_at_purchase") // Evita falha de segurança se o preço do produto mudar amanhã
 
   @@map("order_items")
 }
