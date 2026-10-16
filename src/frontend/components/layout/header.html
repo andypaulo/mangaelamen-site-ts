@@ -1,0 +1,21 @@
+<header class="bg-[#111] p-[15px] text-center">
+  <div class="relative w-[90%] mx-auto">
+    <form method="get" action="/" id="searchForm">
+      <input
+        type="text"
+        id="searchInput"
+        name="search"
+        placeholder="Buscar mangá..."
+        autocomplete="off"
+        class="w-full px-[10px] py-[10px] rounded-[20px] border-none outline-none bg-white text-[#222] placeholder:text-[#999]"
+      />
+    </form>
+
+    <div
+      id="searchPreview"
+      class="hidden absolute top-full left-0 w-full bg-white rounded-b-[10px] shadow-[0_4px_10px_rgba(0,0,0,0.2)] z-[999] text-left"
+    >
+      <ul id="suggestionsList" class="list-none m-0 p-0"></ul>
+    </div>
+  </div>
+</header>

@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Faça seu Login - Manga&Lamen</title>
+    <link href="../../css/style.css" rel="stylesheet">
+</head>
+<body>
+    <div class="flex min-h-screen justify-center items-center bg-[#EDF1F5] w-full h-full">
+
+        <!-- ===================== LOGIN ===================== -->
+        <form id="loginForm" class="shadow-md rounded-lg p-6 w-[370px] h-auto text-center bg-[#ffffff]">
+            <div class="flex items-center justify-center gap-2 mt-6">
+                <a>
+                    <img src="/assets/public/images/manga&lamenlogo.webp" alt="Logo" class="flex w-[160px] h-[110px]">
+                </a>
+            </div>
+            <h1 class="text-2xl font-bold text-[#3D3D3D] cursor-default mt-2">Faça seu Login</h1>
+            <div class="mb-1">
+                <input
+                    type="email"
+                    id="loginEmail"
+                    name="email"
+                    required
+                    class="w-full border-2 outline-0 p-1.75 rounded-md border-gray-700 focus:border-brandpink md:focus:border-brandpink mt-5"
+                    placeholder="E-mail"
+                />
+                <input
+                    type="password"
+                    id="loginPassword"
+                    name="password"
+                    required
+                    class="w-full border-2 outline-0 p-1.75 rounded-md border-gray-700 focus:border-brandpink md:focus:border-brandpink mt-2"
+                    placeholder="Senha"
+                />
+            </div>
+
+            <p id="loginErro" class="hidden text-red-600 text-[13px] text-left mt-2"></p>
+
+            <div class="text-[#929292] text-[13px] cursor-default underline m-1 justify-end flex">
+                <a href="#" class="text-brandpink hover:text-brandpink-hover text-[13px]">Esqueci minha senha</a>
+            </div>
+            <div class="flex justify-center items-center mb-5">
+                <button type="submit" id="btnLogin" class="w-full bg-brandpink text-white p-2 rounded-md hover:bg-brandpink-hover transition cursor-pointer mt-6.5">Fazer login</button>
+            </div>
+            <div class="flex text-[#929292] text-[13px] cursor-default m-2 mb-2.5 justify-center items-center gap-1.5">
+                <p class="text-[13px] no-underline cursor-text">Não tem conta? </p>
+                <a href="#" id="linkMostrarRegistro" class="ml-1 text-brandpink hover:text-brandpink-hover text-[13px] underline decoration-2 decoration-transparent underline-offset-4 transition-all duration-300 hover:decoration-brandpink"> Crie sua conta</a>
+            </div>
+        </form>
+
+        <!-- ===================== REGISTRO ===================== -->
+        <form id="registerForm" class="hidden shadow-md rounded-lg p-6 w-[370px] h-auto text-center bg-[#ffffff]">
+            <div class="flex items-center justify-center gap-2 mt-2">
+                <img src="/assets/public/images/manga&lamenlogo.webp" alt="Logo" class="flex w-[160px] h-[110px]">
+            </div>
+
+            <h1 class="text-2xl font-bold text-[#3D3D3D] cursor-default mt-2">Crie sua conta</h1>
+
+            <div class="mb-1">
+                <input
+                    type="text"
+                    id="name"
+                    name="name"
+                    required
+                    class="w-full border-2 outline-0 p-1.75 rounded-md border-gray-700 focus:border-brandpink md:focus:border-brandpink mt-5"
+                    placeholder="Nome completo"
+                />
+                <input
+                    type="email"
+                    id="email"
+                    name="email"
+                    required
+                    class="w-full border-2 outline-0 p-1.75 rounded-md border-gray-700 focus:border-brandpink md:focus:border-brandpink mt-2"
+                    placeholder="E-mail"
+                />
+                <input
+                    type="password"
+                    id="password"
+                    name="password"
+                    required
+                    minlength="6"
+                    class="w-full border-2 outline-0 p-1.75 rounded-md border-gray-700 focus:border-brandpink md:focus:border-brandpink mt-2"
+                    placeholder="Senha"
+                />
+                <input
+                    type="password"
+                    id="confirmPassword"
+                    name="confirmPassword"
+                    required
+                    minlength="6"
+                    class="w-full border-2 outline-0 p-1.75 rounded-md border-gray-700 focus:border-brandpink md:focus:border-brandpink mt-2"
+                    placeholder="Confirme sua senha"
+                />
+            </div>
+            <p id="formErro" class="hidden text-red-600 text-[13px] text-left mt-3"></p>
+
+            <div class="flex justify-center items-center mb-5">
+                <button
+                    type="submit"
+                    id="btnRegistrar"
+                    class="w-full bg-brandpink text-white p-2 rounded-md hover:bg-brandpink-hover transition cursor-pointer mt-5"
+                >
+                    Criar conta
+                </button>
+            </div>
+
+            <div class="flex text-[#929292] text-[13px] cursor-default m-2 mb-2.5 justify-center items-center gap-1.5">
+                <p class="text-[13px] no-underline cursor-text">Já tem conta?</p>
+                <a href="#" id="linkMostrarLogin" class="ml-1 text-brandpink hover:text-brandpink-hover text-[13px] underline decoration-2 decoration-transparent underline-offset-4 transition-all duration-300 hover:decoration-brandpink">
+                    Fazer login
+                </a>
+            </div>
+        </form>
+    </div>
+
+    <script src="/scripts/login-register.js"></script>
+</body>
+</html>

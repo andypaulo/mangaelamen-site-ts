@@ -1,0 +1,21 @@
+@import "tailwindcss";
+ 
+/*
+  Tokens do design system. Qualquer classe Tailwind gerada a partir daqui
+  (bg-brandpink, text-accentblue, font-poppins, etc.) passa a funcionar
+  normalmente nos templates, sem precisar de tailwind.config.js.
+*/
+@theme {
+  --color-brandpink: #ff69b4;
+  --color-brandpink-hover: #ff4fa8;
+  --color-accentblue: #00a6ff;
+ 
+  --font-poppins: "Poppins", sans-serif;
+  --font-inter: "Inter", sans-serif;
+}
+ 
+/* Estilos base do projeto que não fazem sentido como utilities inline */
+body {
+  margin: 0;
+}
+ 

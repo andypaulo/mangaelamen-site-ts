@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Cadastrar Produto - Manga&Lamen</title>
+  <link rel="stylesheet" href="/css/style.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+    rel="stylesheet"
+  />
+  <link rel="icon" type="image/x-icon" href="/images/manga&lamenlogo.webp" />
+</head>
+<body class="font-poppins bg-[#f2f2f2] pb-[60px]">
+
+  <div data-include="/components/layout/header.html"></div>
+  <div data-include="/components/layout/nav.html"></div>
+
+  <main role="main">
+    <div class="max-w-3xl mx-auto px-5 py-8">
+
+      <a href="/pages/admin/admin.html" class="inline-flex items-center gap-1 text-sm text-[#666] hover:text-[#111] mb-4">
+        ← Voltar ao painel
+      </a>
+
+      <form id="formProduto" class="bg-white rounded-2xl shadow-sm p-8">
+        <h2 id="tituloForm" class="text-2xl font-bold text-[#111] mb-6">Cadastrar Produto</h2>
+
+        <div class="mb-5">
+          <label for="name" class="font-semibold text-[#222] mb-2 block">Nome</label>
+          <input type="text" id="name" name="name" required
+                 class="w-full border border-[#dcdcdc] rounded-lg px-4 py-3 focus:outline-none focus:border-brandpink focus:ring-2 focus:ring-brandpink/20" />
+        </div>
+
+        <div class="mb-5">
+          <label for="description" class="font-semibold text-[#222] mb-2 block">Descrição</label>
+          <textarea id="description" name="description" rows="4"
+                    class="w-full border border-[#dcdcdc] rounded-lg px-4 py-3 focus:outline-none focus:border-brandpink focus:ring-2 focus:ring-brandpink/20"></textarea>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-5 mb-5">
+          <div>
+            <label for="price" class="font-semibold text-[#222] mb-2 block">Preço (R$)</label>
+            <input type="number" id="price" name="price" step="0.01" min="0" required
+                   class="w-full border border-[#dcdcdc] rounded-lg px-4 py-3 focus:outline-none focus:border-brandpink focus:ring-2 focus:ring-brandpink/20" />
+          </div>
+          <div>
+            <label for="stock" class="font-semibold text-[#222] mb-2 block">Estoque</label>
+            <input type="number" id="stock" name="stock" min="0" value="0" required
+                   class="w-full border border-[#dcdcdc] rounded-lg px-4 py-3 focus:outline-none focus:border-brandpink focus:ring-2 focus:ring-brandpink/20" />
+          </div>
+        </div>
+
+        <div class="mb-5">
+          <label for="image" class="font-semibold text-[#222] mb-2 block">Imagem (URL ou nome do arquivo)</label>
+          <input type="text" id="image" name="image" placeholder="sem-foto.jpg ou https://..."
+                 class="w-full border border-[#dcdcdc] rounded-lg px-4 py-3 focus:outline-none focus:border-brandpink focus:ring-2 focus:ring-brandpink/20" />
+          <div class="mt-3 flex items-center gap-3">
+            <img id="previewImagem" src="/images/sem-foto.jpg" alt="Pré-visualização" class="w-16 h-24 object-cover rounded border border-[#eee]" />
+            <span class="text-xs text-[#888]">Pré-visualização da imagem</span>
+          </div>
+        </div>
+
+        <div class="mb-6">
+          <label for="categoryId" class="font-semibold text-[#222] mb-2 block">Categoria</label>
+          <select id="categoryId" name="categoryId" required
+                  class="w-full border border-[#dcdcdc] rounded-lg px-4 py-3 focus:outline-none focus:border-brandpink focus:ring-2 focus:ring-brandpink/20">
+            <option value="">Selecione</option>
+          </select>
+        </div>
+
+        <div id="formErro" class="hidden bg-red-50 border border-red-200 text-red-800 rounded-lg px-4 py-3 mb-5 text-sm"></div>
+
+        <div class="flex gap-3">
+          <button id="btnSubmit" type="submit" class="bg-brandpink hover:bg-brandpink-hover text-white font-semibold px-6 py-3 rounded-lg transition-colors">
+            Cadastrar Produto
+          </button>
+          <a href="/pages/admin/admin.html" class="px-6 py-3 rounded-lg font-semibold text-[#555] border border-[#ddd] hover:bg-[#f5f5f5] transition-colors">
+            Cancelar
+          </a>
+        </div>
+      </form>
+    </div>
+  </main>
+
+  <div data-include="/components/layout/footer.html"></div>
+
+  <script src="/scripts/include-layout.js"></script>
+  <script src="/scripts/nav-active.js"></script>
+  <script src="/scripts/header-search.js"></script>
+  <script src="/scripts/admin-form.js"></script>
+</body>
+</html>

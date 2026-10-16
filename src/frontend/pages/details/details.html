@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title id="pageTitle">Detalhes do Produto - Manga&Lamen</title>
+  <link rel="stylesheet" href="/css/style.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Inter:wght@400;500;600;700&display=swap"
+    rel="stylesheet"
+  />
+  <link rel="icon" type="image/x-icon" href="/images/manga&lamenlogo.webp" />
+</head>
+<body class="font-poppins bg-[#d3d3d3] pb-[60px]">
+
+  <div data-include="/components/layout/header.html"></div>
+  <div data-include="/components/layout/nav.html"></div>
+
+  <main role="main" class="pb-0 bg-[#141414] text-white font-inter relative">
+
+    <a href="/" class="fixed top-5 left-5 text-white text-2xl no-underline z-[999]">&#8592;</a>
+
+    <div id="productContent" class="hidden">
+      <div class="flex gap-10 p-10 items-start max-[700px]:flex-col">
+
+        <div class="flex gap-3">
+          <div class="flex flex-col gap-2">
+            <img id="thumbnailImg" src="" alt=""
+                 onclick="document.getElementById('mainImg').src=this.src"
+                 class="w-[70px] h-[95px] object-cover border-2 border-[#333] rounded hover:border-accentblue cursor-pointer" />
+          </div>
+          <div>
+            <img id="mainImg" src="" alt="" class="w-[300px] aspect-[2/3] object-cover rounded-lg" />
+          </div>
+        </div>
+
+        <div class="flex-1 flex flex-col gap-4">
+          <h1 id="productName" class="text-[1.4rem] font-bold text-white leading-[1.4]"></h1>
+          <div id="productPrice" class="text-3xl font-bold text-white"></div>
+          <p id="productDescription" class="text-[0.95rem] text-[#AAAAAA] leading-[1.6]"></p>
+        </div>
+
+        <div class="w-[280px] bg-[#202020] rounded-[10px] p-5 flex flex-col gap-3.5 shrink-0">
+          <div id="productStock" class="text-[0.85rem] text-[#AAAAAA]"></div>
+
+          <button id="btnBuyNow"
+                  class="w-full py-3 bg-accentblue text-black font-inter text-[0.95rem] font-semibold border-none rounded-lg cursor-pointer hover:bg-[#0090e0]">
+            Comprar agora
+          </button>
+
+          <button id="btnAddCart"
+                  class="w-full py-3 bg-[#A8E0FF] text-[#141414] font-inter text-[0.95rem] font-semibold border-none rounded-lg cursor-pointer flex items-center justify-center gap-2 hover:bg-[#8fd4f7]">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="16" fill="currentColor" viewBox="0 0 16 16">
+              <path d="M0 1.5A.5.5 0 0 1 .5 1H2a.5.5 0 0 1 .485.379L2.89 3H14.5a.5.5 0 0 1 .491.592l-1.5 8A.5.5 0 0 1 13 12H4a.5.5 0 0 1-.491-.408L2.01 3.607 1.61 2H.5a.5.5 0 0 1-.5-.5M3.102 4l1.313 7h8.17l1.313-7zM5 12a2 2 0 1 0 0 4 2 2 0 0 0 0-4m7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4m-7 1a1 1 0 1 1 0 2 1 1 0 0 1 0-2m7 0a1 1 0 1 1 0 2 1 1 0 0 1 0-2" />
+            </svg>
+            Adicionar ao carrinho
+          </button>
+        </div>
+      </div>
+
+      <div class="px-10 pb-10">
+        <h2 class="text-base font-semibold text-white mb-4">O que você precisa saber sobre este produto:</h2>
+        <p id="productFullDescription" class="text-[0.95rem] text-[#AAAAAA] leading-[1.6]"></p>
+      </div>
+
+      <div class="px-10 pb-[60px] border-t border-[#2a2a2a] pt-8">
+        <h2 class="text-base font-semibold text-white mb-5">Produtos relacionados</h2>
+        <div id="relatedGrid" class="grid grid-cols-[repeat(auto-fill,minmax(220px,1fr))] gap-5"></div>
+      </div>
+    </div>
+
+    <div id="errorState" class="hidden text-center py-24 text-[#aaa]">
+      <p class="text-lg font-semibold mb-2">Produto não encontrado</p>
+      <a href="/" class="text-accentblue underline">Voltar para a vitrine</a>
+    </div>
+  </main>
+
+  <div data-include="/components/layout/footer.html"></div>
+
+  <script src="/scripts/include-layout.js"></script>
+  <script src="/scripts/nav-active.js"></script>
+  <script src="/scripts/header-search.js"></script>
+  <script src="/scripts/details.js"></script>
+  <script src="/scripts/nav-auth.js"></script>
+  <script src="/scripts/auth.js"></script>
+</body>
+</html>
