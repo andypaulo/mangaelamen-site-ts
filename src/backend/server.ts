@@ -23,6 +23,9 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 if (!process.env.JWT_SECRET) {
   throw new Error('JWT_SECRET is not defined in environment variables');
 }
+if (!process.env.COOKIE_SECRET) {
+  throw new Error('COOKIE_SECRET is not defined in environment variables');
+}
 
 server.register(fastifyFormbody);
 server.register(fastifyCookie, {
@@ -37,16 +40,24 @@ server.register(fastifyJwt, {
     signed: true,
   },
 });
+// Bloqueia qualquer acesso direto não autenticado ou de clientes normais às páginas administrativas
+server.addHook('preHandler', async (request, reply) => {
+  if (request.url.startsWith('/pages/admin')) {
+    try {
+      await request.jwtVerify();
+      if (request.user.role !== 'ADMIN') {
+        return reply.redirect('/pages/vitrine/index.html');
+      }
+    } catch {
+      return reply.redirect('/pages/login/login.html');
+    }
+  }
+});
 server.register(fastifyStatic, {
   root: path.join(__dirname, '..', 'frontend'),
   prefix: '/',
 });
 
-server.register(fastifyStatic, {
-  root: path.join(__dirname, '..', 'frontend', 'css'),
-  prefix: '/css/',
-  decorateReply: false,
-});
 server.register(authRoutes, { prefix: '/api' });
 server.register(cartRoutes, { prefix: '/api' });
 server.register(productRoutes, { prefix: '/api' });
@@ -55,7 +66,7 @@ server.register(categoryRoutes, { prefix: '/api' });
 
 
 
-// Centraliza todo tratamento de erro — controllers não precisam mais de try/catch
+// Centraliza todo tratamento de erro â€” controllers nÃ£o precisam mais de try/catch
 server.setErrorHandler((error: FastifyError, request, reply) => {
   if (error instanceof AppError) {
     return reply.status(error.statusCode).send({ message: error.message });
@@ -75,7 +86,9 @@ server.get('/api/health', async (request, reply) => {
 });
 
 server.ready(() => {
-  console.log(server.printRoutes());
+  if (process.env.NODE_ENV !== 'production') {
+    console.log(server.printRoutes());
+  }
 });
 
 const start = async () => {

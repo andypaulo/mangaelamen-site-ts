@@ -2,26 +2,6 @@ import { FastifyRequest, FastifyReply } from 'fastify';
 import { prisma } from '../config/database.js';
 import { AppError } from '../utils/app-error.js';
 
-interface CartItemWithProduct {
-  id: string;
-  cartId: string;
-  productId: number;
-  quantity: number;
-  createdAt: Date;
-  updatedAt: Date;
-  product: {
-    id: number;
-    name: string;
-    description: string;
-    price: number;
-    stock: number;
-    image: string;
-    categoryId: number;
-    createdAt: Date;
-    updatedAt: Date;
-  };
-}
-
 export const cartController = {
   async addItem(request: FastifyRequest, reply: FastifyReply) {
     const userId = request.user.id;
@@ -80,7 +60,7 @@ export const cartController = {
       return reply.status(200).send({ items: [], totalPrice: 0 });
     }
 
-    const totalPrice = (cart.items as unknown as CartItemWithProduct[]).reduce((acc, item) => {
+    const totalPrice = cart.items.reduce((acc, item) => {
       return acc + (item.product.price * item.quantity);
     }, 0);
 
@@ -103,7 +83,7 @@ export const cartController = {
       let totalOrderPrice = 0;
       const orderItemsData = [];
 
-      for (const item of (cart.items as unknown as CartItemWithProduct[])) {
+      for (const item of cart.items) {
         if (item.product.stock < item.quantity) {
           throw new AppError(`Out of stock: ${item.product.name}`, 400);
         }

@@ -4,11 +4,6 @@ import { Prisma } from '../generated/prisma/client.js';
 import { AppError } from '../utils/app-error.js';
 
 export const storefrontController = {
-  async getCategories(request: FastifyRequest, reply: FastifyReply) {
-    const categories = await prisma.category.findMany({ orderBy: { name: 'asc' } });
-    return reply.status(200).send(categories);
-  },
-
   async getProducts(request: FastifyRequest, reply: FastifyReply) {
     const { categoryId, search, page } = request.query as {
       categoryId?: string;
@@ -20,7 +15,9 @@ export const storefrontController = {
     const currentPage = Math.max(1, Number(page || 1));
     const offset = (currentPage - 1) * limit;
 
-    const whereClause: Prisma.ProductWhereInput = {};
+    const whereClause: Prisma.ProductWhereInput = {
+      deletedAt: null,
+    };
 
     if (categoryId) {
       whereClause.categoryId = Number(categoryId);
@@ -60,12 +57,12 @@ export const storefrontController = {
       include: { category: true }
     });
 
-    if (!product) {
+    if (!product || product.deletedAt) {
       throw new AppError('Product not found', 404);
     }
 
     const relatedProducts = await prisma.product.findMany({
-      where: { categoryId: product.categoryId, id: { not: product.id } },
+      where: { categoryId: product.categoryId, id: { not: product.id }, deletedAt: null },
       take: 4,
       select: { id: true, name: true, price: true, image: true, categoryId: true }
     });
@@ -78,7 +75,7 @@ export const storefrontController = {
     if (!search || search.length < 2) return reply.status(200).send([]);
 
     const suggestions = await prisma.product.findMany({
-      where: { name: { contains: search } },
+      where: { name: { contains: search }, deletedAt: null },
       take: 5,
       select: { id: true, name: true }
     });

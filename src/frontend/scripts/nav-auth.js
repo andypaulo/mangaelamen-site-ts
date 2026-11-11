@@ -74,29 +74,44 @@ function renderUserMenu(container, user) {
   document.getElementById('logoutButton').addEventListener('click', logout);
 }
 
+function updateAdminVisibility(user) {
+  const adminLink = document.getElementById('navAdminLink');
+  if (!adminLink) return;
+
+  if (user && user.role === 'ADMIN') {
+    adminLink.classList.remove('hidden');
+    adminLink.classList.add('flex');
+  } else {
+    adminLink.classList.add('hidden');
+    adminLink.classList.remove('flex');
+  }
+}
+
 document.addEventListener('layoutReady', async () => {
   const container = document.getElementById('navAuthArea');
-  if (!container) return;
 
   if (!isAuthenticated()) {
-    renderLoginButton(container);
+    updateAdminVisibility(null);
+    if (container) renderLoginButton(container);
     return;
   }
 
   // Renderiza otimisticamente com o que já está em cache (sem flash de loading),
   // depois revalida contra a API em background.
   const cachedUser = getStoredUser();
-  if (cachedUser) renderUserMenu(container, cachedUser);
-  else renderLoginButton(container);
+  updateAdminVisibility(cachedUser);
+  if (container) {
+    if (cachedUser) renderUserMenu(container, cachedUser);
+    else renderLoginButton(container);
+  }
 
   const freshUser = await fetchCurrentUser();
-  if (freshUser) {
-    renderUserMenu(container, freshUser);
-  } else if (!cachedUser) {
-    renderLoginButton(container);
+  updateAdminVisibility(freshUser);
+  if (container) {
+    if (freshUser) {
+      renderUserMenu(container, freshUser);
+    } else if (!cachedUser) {
+      renderLoginButton(container);
+    }
   }
-  // Se a revalidação falhar mas havia cachedUser, mantemos o que já está
-  // na tela — fetchCurrentUser já limpou a sessão internamente se o token
-  // era realmente inválido; nesse caso, na próxima navegação o botão de
-  // login volta a aparecer.
 });

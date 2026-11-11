@@ -123,33 +123,44 @@ export function ProductCard(item) {
   const formattedPrice = Number(item.price).toFixed(2).replace('.', ',');
 
   const soldOutBadge = isSoldOut
-    ? `<div class="absolute top-2.5 left-2.5 z-10">${Badge({ label: 'Sold Out', variant: 'danger-solid' })}</div>`
+    ? `<div class="absolute top-3 left-3 z-10">${Badge({ label: 'Esgotado', variant: 'danger-solid' })}</div>`
     : '';
 
   const buttons = isSoldOut
-    ? Button({ label: 'Unavailable', variant: 'outline', fullWidth: true, disabled: true })
-    : `${Button({ label: 'Buy Now', variant: 'secondary', fullWidth: true, attrs: `data-action="buy" data-id="${item.id}"` })}
-       ${Button({ label: 'Add to Cart', variant: 'primary', fullWidth: true, attrs: `data-action="add" data-id="${item.id}"` })}`;
+    ? Button({ label: 'Indisponível', variant: 'outline', fullWidth: true, disabled: true, extraClass: 'rounded-xl' })
+    : `${Button({ label: 'Comprar Agora', variant: 'secondary', fullWidth: true, extraClass: 'rounded-xl active:scale-[0.98]', attrs: `data-action="buy" data-id="${item.id}"` })}
+       ${Button({ label: 'Adicionar ao Carrinho', variant: 'primary', fullWidth: true, extraClass: 'rounded-xl active:scale-[0.98]', attrs: `data-action="add" data-id="${item.id}"` })}`;
 
   return `
-    <div class="relative bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-lg transition-shadow duration-300 flex flex-col ${isSoldOut ? 'opacity-75' : ''}">
+    <div class="group relative bg-white border border-[#e8e4de] hover:border-[#cfc9c0] rounded-2xl overflow-hidden shadow-[0_2px_10px_rgba(0,0,0,0.02)] hover:shadow-[0_12px_28px_rgba(0,0,0,0.07)] hover:-translate-y-1 transition-all duration-300 flex flex-col ${isSoldOut ? 'opacity-70' : ''}">
       ${soldOutBadge}
-      <div class="relative group">
+      <div class="relative bg-[#f8f6f2] p-4 flex items-center justify-center overflow-hidden">
         <img src="${imageSrc}" alt="${item.name}"
-             class="w-full aspect-[2/3] object-contain bg-white p-2 transition-transform duration-300 group-hover:scale-105 ${isSoldOut ? 'grayscale' : ''}" />
+             class="w-full aspect-[2/3] object-contain transition-transform duration-500 ease-out group-hover:scale-[1.04] ${isSoldOut ? 'grayscale' : ''}" />
         <button type="button" data-quick-view='${encodeURIComponent(JSON.stringify(item))}'
-                class="btn-quick-view absolute top-2.5 right-2.5 bg-white/90 hover:bg-white text-[#111] text-xs font-semibold px-3 py-1.5 rounded-full shadow opacity-0 group-hover:opacity-100 transition-opacity duration-200">
-          Quick View
+                class="btn-quick-view absolute bottom-3 right-3 bg-white/95 backdrop-blur-xs hover:bg-white text-[#111] text-xs font-semibold px-3 py-1.5 rounded-lg shadow-sm opacity-0 group-hover:opacity-100 transition-all duration-200 hover:scale-105 cursor-pointer">
+          Espiar
         </button>
       </div>
-      <div class="p-4 flex flex-col flex-1">
-        <a href="/pages/details/details.html?id=${item.id}" class="no-underline text-inherit flex-1">
-          <h5 class="font-semibold text-[#111] text-base mb-1 line-clamp-2">${item.name}</h5>
-          <p class="text-sm text-[#777] mb-2 line-clamp-2">${item.description ?? ''}</p>
-          <div class="mb-2">${Badge({ label: item.category ? item.category.name : '—', variant: 'neutral' })}</div>
-          <h4 class="text-brandpink font-bold text-xl mb-3">R$ ${formattedPrice}</h4>
+      <div class="p-5 flex flex-col flex-1">
+        <a href="/pages/details/details.html?id=${item.id}" class="no-underline text-inherit flex-1 flex flex-col">
+          <div class="mb-2">
+            <span class="inline-block text-[11px] font-semibold uppercase tracking-wider px-2.5 py-0.5 rounded-md bg-[#f0ece6] text-[#635f6d]">
+              ${item.category ? item.category.name : 'Geral'}
+            </span>
+          </div>
+          <h3 class="font-poppins font-bold text-[#111215] text-base leading-snug mb-1 line-clamp-2 group-hover:text-brandpink transition-colors">
+            ${item.name}
+          </h3>
+          <p class="text-xs text-[#7c7a84] mb-3 line-clamp-2 leading-relaxed">
+            ${item.description ?? ''}
+          </p>
+          <div class="mt-auto pt-2">
+            <span class="text-[11px] font-semibold text-[#8a8793] uppercase tracking-wide block">Preço</span>
+            <h4 class="text-brandpink font-extrabold text-xl font-poppins">R$ ${formattedPrice}</h4>
+          </div>
         </a>
-        <div class="mt-auto flex flex-col gap-2">
+        <div class="mt-4 pt-3 border-t border-[#f2eee9] flex flex-col gap-2">
           ${buttons}
         </div>
       </div>
