@@ -5,6 +5,7 @@ import { AppError } from '../utils/app-error.js';
 export const productController = {
   async list(request: FastifyRequest, reply: FastifyReply) {
     const products = await prisma.product.findMany({
+      where: { deletedAt: null },
       include: { category: true },
       orderBy: { id: 'asc' }
     });
@@ -24,7 +25,7 @@ export const productController = {
       include: { category: true }
     });
 
-    if (!product) {
+    if (!product || product.deletedAt) {
       throw new AppError('Product not found', 404);
     }
 
@@ -82,7 +83,7 @@ export const productController = {
     }
 
     const productExists = await prisma.product.findUnique({ where: { id: productId } });
-    if (!productExists) {
+    if (!productExists || productExists.deletedAt) {
       throw new AppError('Product not found', 404);
     }
 
@@ -115,7 +116,7 @@ export const productController = {
     }
 
     const product = await prisma.product.findUnique({ where: { id: productId } });
-    if (!product) {
+    if (!product || product.deletedAt) {
       throw new AppError('Product not found', 404);
     }
 
@@ -123,7 +124,7 @@ export const productController = {
       throw new AppError('It is not allowed to delete a product with stock greater than zero.', 400);
     }
 
-    await prisma.product.delete({ where: { id: productId } });
+    await prisma.product.update({ where: { id: productId }, data: { deletedAt: new Date() } });
     return reply.status(200).send({ message: 'Product successfully removed' });
   }
 };

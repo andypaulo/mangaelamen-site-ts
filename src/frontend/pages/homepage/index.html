@@ -1,104 +1,325 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-BR" class="scroll-smooth">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Sobre Nós - Manga&Lamen</title>
-  <link rel="stylesheet" href="/css/style.css" />
-</head>
-<body class="font-poppins bg-[#d3d3d3] pb-[60px]">
+  <title>Mangá & Lamen — Mangás com Preço Justo e Conforto</title>
+  <meta name="description" content="A Mangá & Lamen nasceu para trazer mangás originais com preço justo para quem ama a cultura japonesa. Desacelere e encontre sua próxima leitura." />
+  <meta name="page-type" content="product" />
+  <meta name="site-kind" content="other" />
 
+  <link rel="stylesheet" href="/css/style.css" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600;700&display=swap"
+    rel="stylesheet"
+  />
+
+  <link rel="icon" type="image/x-icon" href="/assets/public/images/manga&lamenlogo.webp" />
+</head>
+<body class="font-inter bg-[#fbf9f5] text-[#1c1c1f] antialiased selection:bg-brandpink selection:text-white">
+
+  <!-- Header & Nav Globais -->
   <div data-include="/components/layout/header.html"></div>
   <div data-include="/components/layout/nav.html"></div>
 
-  <main role="main" class="pb-0">
-    <div class="sobre-container w-full">
+  <main role="main">
 
-      <!-- HERO -->
-      <section class="bg-gradient-to-br from-[#111] to-[#222] px-[10%] py-20 text-white relative overflow-hidden w-full min-h-[60vh]">
-        <div class="flex justify-between items-center gap-[60px] flex-nowrap relative z-[2] max-[900px]:flex-wrap">
-          <div class="flex-1 min-w-[300px]">
-            <h1 class="text-[58px] max-[900px]:text-[42px] mb-[15px] font-extrabold tracking-[1px] leading-[1.1]">
-              Mangá <span class="text-brandpink">&amp;</span> Lamen
-            </h1>
-            <h2 class="text-[22px] max-[900px]:text-[19px] font-normal mb-[30px] text-[#d7d7d7] leading-[1.5]">
-              Seu momento de paz começa com um bom mangá e um universo inteiro para descobrir.
-            </h2>
-            <p class="text-[17px] leading-[1.9] text-[#cfcfcf] max-w-[700px]">
-              A Mangá &amp; Lamen nasceu para trazer mangás com preço justo para fãs apaixonados pela cultura japonesa.
-              Nossa missão é transformar cada leitura em um momento relaxante, divertido e marcante, como aproveitar
-              um bom lamen enquanto acompanha sua obra favorita.
+    <!-- ================================================================= -->
+    <!-- 1. HERO SECTION: Impacto Editorial, Proposta Clara e Ação Direta -->
+    <!-- ================================================================= -->
+    <section class="relative min-h-[calc(100vh-110px)] flex items-center justify-center px-6 lg:px-12 py-16 overflow-hidden bg-gradient-to-b from-[#18181c] via-[#121215] to-[#0c0c0e] text-white">
+      <!-- Glow sutil de atmosfera (sem exageros) -->
+      <div class="absolute -top-32 right-1/4 w-96 h-96 bg-brandpink/10 rounded-full blur-3xl pointer-events-none"></div>
+      <div class="absolute bottom-0 left-10 w-80 h-80 bg-accentblue/5 rounded-full blur-3xl pointer-events-none"></div>
+
+      <div class="max-w-6xl w-full mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-14 items-center relative z-10">
+        
+        <!-- Bloco de Texto do Hero -->
+        <div class="lg:col-span-7 flex flex-col items-start">
+          <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/10 border border-white/15 text-xs font-medium tracking-wide uppercase text-white/90 mb-6 backdrop-blur-sm">
+            <span class="w-2 h-2 rounded-full bg-brandpink animate-pulse"></span>
+            Curadoria Especializada &amp; Preço Justo
+          </div>
+
+          <h1 class="font-poppins text-4xl sm:text-5xl lg:text-[56px] font-extrabold leading-[1.1] tracking-tight mb-6">
+            O seu refúgio de paz entre um <span class="text-transparent bg-clip-text bg-gradient-to-r from-brandpink to-[#ff8dc7]">bom mangá</span> e uma refeição quentinha.
+          </h1>
+
+          <p class="text-base sm:text-lg text-white/75 leading-relaxed font-normal max-w-xl mb-9">
+            Criamos a <strong class="text-white font-medium">Mangá &amp; Lamen</strong> para fãs apaixonados pela cultura japonesa que cansaram de preços abusivos. Cada volume é selecionado e enviado com o mesmo cuidado de um momento de tranquilidade.
+          </p>
+
+          <div class="flex flex-wrap items-center gap-4 w-full sm:w-auto">
+            <a
+              href="/pages/vitrine/index.html"
+              class="inline-flex items-center justify-center gap-2.5 px-7 py-4 rounded-xl bg-brandpink text-white font-semibold text-base shadow-lg shadow-brandpink/25 hover:bg-brandpink-hover hover:shadow-brandpink/40 hover:-translate-y-0.5 active:translate-y-0 transition-all duration-200"
+            >
+              Explorar Catálogo de Mangás
+              <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3" />
+              </svg>
+            </a>
+
+            <a
+              href="#pilares"
+              class="inline-flex items-center justify-center px-6 py-4 rounded-xl bg-white/5 border border-white/15 text-white/90 hover:text-white hover:bg-white/10 hover:border-white/25 transition-all duration-200 text-base font-medium"
+            >
+              Conhecer a Proposta
+            </a>
+          </div>
+
+          <!-- Micro-garantias -->
+          <div class="grid grid-cols-3 gap-6 pt-10 mt-10 border-t border-white/10 w-full max-w-lg text-xs text-white/60">
+            <div>
+              <span class="block text-white font-semibold text-sm">100% Originais</span>
+              Exemplares novos
+            </div>
+            <div>
+              <span class="block text-white font-semibold text-sm">Embalagem Segura</span>
+              Proteção anti-amasso
+            </div>
+            <div>
+              <span class="block text-white font-semibold text-sm">Envio Nacional</span>
+              Direto para sua casa
+            </div>
+          </div>
+        </div>
+
+        <!-- Bloco Visual do Hero -->
+        <div class="lg:col-span-5 relative flex justify-center">
+          <div class="relative w-full max-w-[460px] group">
+            <!-- Moldura elegante -->
+            <div class="absolute -inset-2 bg-gradient-to-tr from-brandpink/20 to-white/10 rounded-[32px] blur-lg opacity-60 group-hover:opacity-100 transition-opacity duration-500"></div>
+
+            <div class="relative overflow-hidden rounded-[26px] bg-[#1a1a20] border border-white/15 shadow-2xl">
+              <img
+                src="/assets/public/images/Manga&LamenContato.jpg"
+                alt="Mangá e Lamen - Cultura, Mangás e Conforto"
+                class="w-full h-[480px] object-cover transition-transform duration-700 ease-out group-hover:scale-[1.03]"
+                loading="eager"
+              />
+
+              <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent pointer-events-none"></div>
+
+              <div class="absolute bottom-5 left-5 right-5 p-4 rounded-xl bg-black/60 backdrop-blur-md border border-white/15 text-white">
+                <p class="text-xs font-semibold tracking-wider uppercase text-brandpink mb-1">Ritual da Leitura</p>
+                <p class="text-sm text-white/90 font-medium">“Desacelere o mundo, abra seu mangá e aproveite a viagem.”</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ================================================================= -->
+    <!-- 2. PILARES & VALOR: O que nos diferencia de livrarias comuns     -->
+    <!-- ================================================================= -->
+    <section id="pilares" class="py-24 px-6 lg:px-12 max-w-6xl mx-auto">
+      <div class="text-center max-w-2xl mx-auto mb-16">
+        <span class="text-xs font-bold uppercase tracking-widest text-brandpink mb-2 block">Nossos Compromissos</span>
+        <h2 class="font-poppins text-3xl sm:text-4xl font-extrabold text-[#111215] tracking-tight mb-4">
+          Por que a Mangá &amp; Lamen é diferente?
+        </h2>
+        <p class="text-base text-[#5c5b64] leading-relaxed">
+          Unimos a paixão otaku com respeito real pelo leitor: catálogo sem inflação forçada e experiência transparente do pedido à entrega.
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <!-- Pilar 1 -->
+        <article class="bg-white rounded-2xl p-8 border border-[#e8e4de] shadow-[0_4px_20px_rgba(0,0,0,0.03)] hover:shadow-[0_12px_32px_rgba(0,0,0,0.06)] hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between">
+          <div>
+            <div class="w-12 h-12 rounded-xl bg-[#fff0f6] text-brandpink flex items-center justify-center font-bold text-xl mb-6">
+              ¥
+            </div>
+            <h3 class="font-poppins text-xl font-bold text-[#111215] mb-3">Preço Justo de Verdade</h3>
+            <p class="text-sm sm:text-base text-[#5c5b64] leading-relaxed">
+              O mercado de mangás no Brasil tem sofrido com preços inflacionados. Nossa missão é manter margens justas para que você consiga colecionar sem pesar no bolso.
             </p>
           </div>
-          <div class="flex-1 flex justify-center items-center min-w-[320px]">
-            <img
-              src="../../../assets/public/images/Manga&LamenContato.jpg"
-              alt="ContatoIMG"
-              class="w-full max-w-[560px] rounded-[28px] shadow-[0_15px_35px_rgba(0,0,0,0.35)] transition-transform duration-300 hover:scale-[1.02]"
-            />
+          <div class="mt-6 pt-6 border-t border-[#f0ece6] text-xs font-semibold text-[#8a8793] uppercase tracking-wider">
+            Acessibilidade &amp; Respeito
           </div>
-        </div>
-      </section>
+        </article>
 
-      <!-- SOBRE A LOJA -->
-      <section class="px-[10%] py-20">
-        <h3 class="text-[42px] max-[900px]:text-[34px] mb-5 text-[#111]">Sobre a Loja</h3>
-        <p class="text-lg leading-[2] mb-5 text-[#333]">
-          Somos uma loja online especializada exclusivamente em mangás.
-          Trabalhamos para oferecer uma experiência moderna, simples e agradável para leitores que querem encontrar
-          suas obras favoritas sem preços abusivos.
+        <!-- Pilar 2 -->
+        <article class="bg-white rounded-2xl p-8 border border-[#e8e4de] shadow-[0_4px_20px_rgba(0,0,0,0.03)] hover:shadow-[0_12px_32px_rgba(0,0,0,0.06)] hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between">
+          <div>
+            <div class="w-12 h-12 rounded-xl bg-[#edf7ff] text-accentblue flex items-center justify-center font-bold text-xl mb-6">
+              ⛩
+            </div>
+            <h3 class="font-poppins text-xl font-bold text-[#111215] mb-3">Universo &amp; Curadoria</h3>
+            <p class="text-sm sm:text-base text-[#5c5b64] leading-relaxed">
+              De clássicos que marcaram época aos lançamentos contemporâneos de Shonen, Seinen e Slice of Life. Obras que valem a pena ter na estante física.
+            </p>
+          </div>
+          <div class="mt-6 pt-6 border-t border-[#f0ece6] text-xs font-semibold text-[#8a8793] uppercase tracking-wider">
+            De fã para fã
+          </div>
+        </article>
+
+        <!-- Pilar 3 -->
+        <article class="bg-white rounded-2xl p-8 border border-[#e8e4de] shadow-[0_4px_20px_rgba(0,0,0,0.03)] hover:shadow-[0_12px_32px_rgba(0,0,0,0.06)] hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between">
+          <div>
+            <div class="w-12 h-12 rounded-xl bg-[#fff7ed] text-[#ea580c] flex items-center justify-center font-bold text-xl mb-6">
+              🍜
+            </div>
+            <h3 class="font-poppins text-xl font-bold text-[#111215] mb-3">Conforto do Lamen</h3>
+            <p class="text-sm sm:text-base text-[#5c5b64] leading-relaxed">
+              O lamen no nosso nome representa o calor, a pausa reconfortante e a sensação de estar em casa. A leitura é o seu momento sagrado de desacelerar.
+            </p>
+          </div>
+          <div class="mt-6 pt-6 border-t border-[#f0ece6] text-xs font-semibold text-[#8a8793] uppercase tracking-wider">
+            Experiência acolhedora
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <!-- ================================================================= -->
+    <!-- 3. MANIFESTO & EXPERIÊNCIA: O que guia a leitura                 -->
+    <!-- ================================================================= -->
+    <section class="py-20 px-6 lg:px-12 bg-[#121215] text-white relative overflow-hidden">
+      <div class="max-w-4xl mx-auto text-center relative z-10">
+        <span class="inline-block px-3 py-1 rounded-full bg-white/10 text-brandpink text-xs font-semibold tracking-wider uppercase mb-6">
+          Nosso Lema
+        </span>
+
+        <blockquote class="font-poppins text-2xl sm:text-3xl lg:text-4xl font-semibold leading-snug tracking-tight text-[#f2f1f6] mb-8">
+          “Nada melhor do que desacelerar o mundo por alguns minutos, abrir um mangá e simplesmente aproveitar a viagem.”
+        </blockquote>
+
+        <p class="text-base sm:text-lg text-white/70 max-w-2xl mx-auto leading-relaxed mb-10">
+          Tratamos cada pacote como um presente enviado para a sua casa. Embalagens reforçadas para evitar quinas amassadas e garantir que seu volume chegue como saiu da editora.
         </p>
-        <p class="text-lg leading-[2] mb-5 text-[#333]">
-          Inspirada no conforto de uma boa leitura em um momento tranquilo do dia,
-          a Mangá &amp; Lamen mistura o universo otaku com uma identidade visual moderna,
-          trazendo referências sutis aos animes e à cultura japonesa.
-        </p>
 
-        <div class="grid grid-cols-[repeat(auto-fit,minmax(280px,1fr))] gap-[25px] mt-[50px]">
-          <div class="bg-white rounded-[22px] p-[30px] shadow-[0_10px_25px_rgba(0,0,0,0.08)] border border-[#e8e8e8] transition-transform duration-300 hover:-translate-y-2">
-            <h4 class="text-2xl mb-[15px] text-brandpink">Mangás</h4>
-            <p class="text-[#444] leading-[1.8]">Catálogo focado em diversos gêneros de mangás para todos os tipos de leitores.</p>
-          </div>
-          <div class="bg-white rounded-[22px] p-[30px] shadow-[0_10px_25px_rgba(0,0,0,0.08)] border border-[#e8e8e8] transition-transform duration-300 hover:-translate-y-2">
-            <h4 class="text-2xl mb-[15px] text-brandpink">Preço Justo</h4>
-            <p class="text-[#444] leading-[1.8]">Nossa proposta é tornar a leitura mais acessível sem abrir mão da qualidade.</p>
-          </div>
-          <div class="bg-white rounded-[22px] p-[30px] shadow-[0_10px_25px_rgba(0,0,0,0.08)] border border-[#e8e8e8] transition-transform duration-300 hover:-translate-y-2">
-            <h4 class="text-2xl mb-[15px] text-brandpink">Universo Otaku</h4>
-            <p class="text-[#444] leading-[1.8]">Uma identidade inspirada em animes, Japão e na experiência acolhedora de uma boa leitura.</p>
-          </div>
-        </div>
-      </section>
+        <a
+          href="/pages/vitrine/index.html"
+          class="inline-flex items-center gap-2 px-8 py-4 rounded-xl bg-white text-[#111215] font-semibold text-base hover:bg-white/90 hover:scale-[1.02] active:scale-[0.98] transition-all duration-200"
+        >
+          Ver Todos os Mangás Disponíveis
+        </a>
+      </div>
+    </section>
 
-      <!-- CONTATO & REDES -->
-      <section class="bg-gradient-to-br from-[#111] to-[#1b1b1b] text-white px-[10%] py-[70px] mt-20">
-        <h3 class="text-[42px] max-[900px]:text-[34px] mb-[25px]">Contato &amp; Redes</h3>
-
-        <div class="flex flex-col gap-[18px] text-lg">
-          <p><strong>CNPJ:</strong> 66.567.328/0001-00</p>
-          <p>
-            <strong>Instagram:</strong>
-            <a href="https://www.instagram.com/mangaeramen/" class="text-brandpink no-underline transition-colors duration-300 hover:text-white"> @mangaeramen</a>
+    <!-- ================================================================= -->
+    <!-- 4. CONTATO, REDES & DADOS OFICIAIS                                -->
+    <!-- ================================================================= -->
+    <section id="contato" class="py-24 px-6 lg:px-12 max-w-6xl mx-auto">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
+        
+        <div class="lg:col-span-5">
+          <span class="text-xs font-bold uppercase tracking-widest text-brandpink mb-2 block">Canais Oficiais</span>
+          <h2 class="font-poppins text-3xl font-extrabold text-[#111215] mb-4">Fale Conosco &amp; Compre Online</h2>
+          <p class="text-base text-[#5c5b64] leading-relaxed mb-6">
+            Dúvidas sobre edições, fretes ou recomendações de títulos? Nossa equipe atende diretamente você pelos canais oficiais abaixo.
           </p>
-          <p><strong>WhatsApp:</strong> (11) 91352-1617</p>
-          <p>
-            <strong>Shopee:</strong>
-            <a href="https://br.shp.ee/sxhzYf7A" target="_blank" rel="noopener noreferrer" class="text-brandpink no-underline transition-colors duration-300 hover:text-white"> Visitar Loja na Shopee</a>
-          </p>
+
+          <div class="p-6 rounded-2xl bg-white border border-[#e8e4de] shadow-sm text-sm space-y-3">
+            <div class="flex items-center justify-between py-1 border-b border-[#f0ece6]">
+              <span class="text-[#7c7b86]">Razão Social / CNPJ:</span>
+              <strong class="text-[#1c1c1f]">66.567.328/0001-00</strong>
+            </div>
+            <div class="flex items-center justify-between py-1 border-b border-[#f0ece6]">
+              <span class="text-[#7c7b86]">Atendimento:</span>
+              <span class="text-[#1c1c1f] font-medium">Segunda a Sábado, 09h às 18h</span>
+            </div>
+            <div class="flex items-center justify-between py-1">
+              <span class="text-[#7c7b86]">Origem dos envios:</span>
+              <span class="text-[#1c1c1f] font-medium">São Paulo, Brasil</span>
+            </div>
+          </div>
         </div>
 
-        <div class="mt-[50px] p-[30px] border-l-4 border-brandpink bg-white/[0.04] rounded-[14px] text-[22px] leading-[1.8] text-[#f1f1f1] italic">
-          “Nada melhor do que desacelerar o mundo por alguns minutos,
-          abrir um mangá e simplesmente aproveitar a viagem.”
-        </div>
-      </section>
+        <div class="lg:col-span-7 grid grid-cols-1 sm:grid-cols-2 gap-4">
+          
+          <!-- Shopee -->
+          <a
+            href="https://br.shp.ee/sxhzYf7A"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="group p-6 rounded-2xl bg-white border border-[#e8e4de] shadow-sm hover:border-[#ee4d2d] hover:shadow-md hover:-translate-y-1 transition-all duration-200 flex flex-col justify-between"
+          >
+            <div>
+              <div class="w-10 h-10 rounded-lg bg-[#ee4d2d]/10 text-[#ee4d2d] flex items-center justify-center font-bold text-lg mb-4">
+                S
+              </div>
+              <h3 class="font-poppins font-bold text-lg text-[#111215] group-hover:text-[#ee4d2d] transition-colors">
+                Loja Oficial na Shopee
+              </h3>
+              <p class="text-sm text-[#5c5b64] mt-1 leading-relaxed">
+                Acesse nossas avaliações, cupons de frete e compre com a garantia de entrega da plataforma.
+              </p>
+            </div>
+            <span class="inline-flex items-center gap-1.5 text-xs font-semibold text-[#ee4d2d] mt-4">
+              Visitar Loja Shopee →
+            </span>
+          </a>
 
-    </div>
+          <!-- Instagram -->
+          <a
+            href="https://www.instagram.com/mangaeramen/"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="group p-6 rounded-2xl bg-white border border-[#e8e4de] shadow-sm hover:border-brandpink hover:shadow-md hover:-translate-y-1 transition-all duration-200 flex flex-col justify-between"
+          >
+            <div>
+              <div class="w-10 h-10 rounded-lg bg-brandpink/10 text-brandpink flex items-center justify-center font-bold text-lg mb-4">
+                @
+              </div>
+              <h3 class="font-poppins font-bold text-lg text-[#111215] group-hover:text-brandpink transition-colors">
+                Instagram da Comunidade
+              </h3>
+              <p class="text-sm text-[#5c5b64] mt-1 leading-relaxed">
+                Novidades, reposição de estoque, bastidores e unboxings das edições mais aguardadas.
+              </p>
+            </div>
+            <span class="inline-flex items-center gap-1.5 text-xs font-semibold text-brandpink mt-4">
+              Seguir @mangaeramen →
+            </span>
+          </a>
+
+          <!-- WhatsApp -->
+          <a
+            href="https://wa.me/5511913521617"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="group p-6 rounded-2xl bg-white border border-[#e8e4de] shadow-sm hover:border-[#25d366] hover:shadow-md hover:-translate-y-1 transition-all duration-200 flex flex-col justify-between sm:col-span-2"
+          >
+            <div class="flex items-start gap-4">
+              <div class="w-10 h-10 rounded-lg bg-[#25d366]/10 text-[#25d366] flex items-center justify-center font-bold text-lg shrink-0">
+                W
+              </div>
+              <div>
+                <h3 class="font-poppins font-bold text-lg text-[#111215] group-hover:text-[#25d366] transition-colors">
+                  WhatsApp Direto: (11) 91352-1617
+                </h3>
+                <p class="text-sm text-[#5c5b64] mt-1 leading-relaxed">
+                  Fale diretamente conosco para tirar dúvidas pontuais, consultar volumes específicos ou suporte de pedidos.
+                </p>
+              </div>
+            </div>
+            <span class="inline-flex items-center gap-1.5 text-xs font-semibold text-[#25d366] mt-4 self-end">
+              Iniciar Conversa no WhatsApp →
+            </span>
+          </a>
+
+        </div>
+
+      </div>
+    </section>
+
   </main>
-</body>
+
+  <!-- Scripts do Ecossistema -->
   <script src="/scripts/include-layout.js"></script>
   <script src="/scripts/nav-active.js"></script>
   <script src="/scripts/header-search.js"></script>
   <script src="/scripts/nav-auth.js"></script>
   <script src="/scripts/auth.js"></script>
+</body>
 </html>

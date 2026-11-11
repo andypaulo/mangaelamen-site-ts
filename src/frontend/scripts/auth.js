@@ -1,13 +1,7 @@
 // scripts/auth.js
 // Helpers de autenticação compartilhados entre páginas.
-// Alinhado ao contrato do auth-controller: login salva "token" e "user"
-// (já serializado) no localStorage, e o backend também seta um cookie
-// httpOnly "token" — mas como esse cookie não é legível via JS, aqui
-// usamos o token do localStorage pra montar o header Authorization.
-
-function getToken() {
-  return localStorage.getItem('token');
-}
+// A autenticação é baseada em cookie httpOnly assinado pelo backend,
+// e os dados públicos do perfil do usuário ficam salvos em localStorage.
 
 function getStoredUser() {
   const raw = localStorage.getItem('user');
@@ -21,23 +15,19 @@ function getStoredUser() {
 }
 
 function isAuthenticated() {
-  return Boolean(getToken());
+  return Boolean(getStoredUser());
 }
 
-// Fetch já anexando o header Authorization quando há token salvo.
+// Fetch que aproveita o cookie httpOnly enviado automaticamente pelo navegador.
 // Uso: authFetch('/api/products', { method: 'POST', body: ... })
 async function authFetch(url, options = {}) {
-  const token = getToken();
-  const headers = { ...(options.headers || {}) };
-  if (token) headers.Authorization = `Bearer ${token}`;
-
-  return fetch(url, { ...options, headers });
+  return fetch(url, options);
 }
 
-// Revalida a sessão contra a API (o token pode ter expirado mesmo que o
+// Revalida a sessão contra a API (o cookie pode ter expirado mesmo que o
 // localStorage ainda tenha o "user" salvo). Limpa o storage se inválido.
 async function fetchCurrentUser() {
-  if (!getToken()) return null;
+  if (!getStoredUser()) return null;
 
   try {
     const response = await authFetch('/api/auth/me');
@@ -67,5 +57,21 @@ async function logout() {
   } finally {
     clearSession();
     window.location.href = '/pages/vitrine/index.html';
+  }
+}
+
+// Bloqueia e redireciona imediatamente qualquer acesso não autorizado a páginas de admin no frontend
+if (typeof window !== 'undefined' && window.location.pathname.includes('/pages/admin/')) {
+  const user = getStoredUser();
+  if (!user || user.role !== 'ADMIN') {
+    window.location.replace('/pages/login/login.html');
+  } else {
+    // Revalidação assíncrona contra o servidor para impedir adulteração de localStorage
+    fetchCurrentUser().then((freshUser) => {
+      if (!freshUser || freshUser.role !== 'ADMIN') {
+        clearSession();
+        window.location.replace('/pages/login/login.html');
+      }
+    });
   }
 }

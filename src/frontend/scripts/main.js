@@ -43,15 +43,15 @@ function renderProducts(products) {
 
 function renderPagination(page, totalPages) {
   const leftArrow = page > 1
-    ? `<a href="#" data-page="${page - 1}" class="btn-page w-[42px] h-[42px] rounded-full border-[3px] border-[#4a4a4a] text-[#4a4a4a] flex justify-center items-center text-xl font-bold bg-white transition-transform duration-300 hover:scale-[1.08] hover:text-[#111] hover:border-[#111]">←</a>`
-    : `<div class="w-[42px] h-[42px] rounded-full border-[3px] border-[#4a4a4a] text-[#4a4a4a] flex justify-center items-center text-xl font-bold bg-white opacity-30 pointer-events-none">←</div>`;
+    ? `<a href="#" data-page="${page - 1}" class="btn-page w-11 h-11 rounded-xl border border-[#ded9d2] text-[#1c1c1f] flex justify-center items-center text-lg font-semibold bg-white shadow-xs hover:border-[#1c1c1f] hover:bg-[#fbf9f5] hover:-translate-y-0.5 active:translate-y-0 transition-all duration-200" title="Página anterior">←</a>`
+    : `<div class="w-11 h-11 rounded-xl border border-[#e8e4de] text-[#bbb] flex justify-center items-center text-lg font-semibold bg-[#faf8f5] opacity-50 pointer-events-none">←</div>`;
 
   const rightArrow = page < totalPages
-    ? `<a href="#" data-page="${page + 1}" class="btn-page w-[42px] h-[42px] rounded-full border-[3px] border-[#4a4a4a] text-[#4a4a4a] flex justify-center items-center text-xl font-bold bg-white transition-transform duration-300 hover:scale-[1.08] hover:text-[#111] hover:border-[#111]">→</a>`
-    : `<div class="w-[42px] h-[42px] rounded-full border-[3px] border-[#4a4a4a] text-[#4a4a4a] flex justify-center items-center text-xl font-bold bg-white opacity-30 pointer-events-none">→</div>`;
+    ? `<a href="#" data-page="${page + 1}" class="btn-page w-11 h-11 rounded-xl border border-[#ded9d2] text-[#1c1c1f] flex justify-center items-center text-lg font-semibold bg-white shadow-xs hover:border-[#1c1c1f] hover:bg-[#fbf9f5] hover:-translate-y-0.5 active:translate-y-0 transition-all duration-200" title="Próxima página">→</a>`
+    : `<div class="w-11 h-11 rounded-xl border border-[#e8e4de] text-[#bbb] flex justify-center items-center text-lg font-semibold bg-[#faf8f5] opacity-50 pointer-events-none">→</div>`;
 
   paginationWrapper.innerHTML = leftArrow + rightArrow;
-  pageLabel.textContent = `Page ${page} of ${Math.max(totalPages, 1)}`;
+  pageLabel.textContent = `Página ${page} de ${Math.max(totalPages, 1)}`;
 }
 
 async function loadProducts({ resetPage = false } = {}) {
@@ -68,7 +68,7 @@ async function loadProducts({ resetPage = false } = {}) {
 
   const params = new URLSearchParams(paramsObj);
 
-  filterStatus.textContent = 'Loading products...';
+  filterStatus.textContent = 'Carregando acervo...';
 
   try {
     const response = await fetch(`/api/storefront/products?${params.toString()}`);
@@ -80,7 +80,7 @@ async function loadProducts({ resetPage = false } = {}) {
     currentPage = data.pagination.currentPage;
 
     filterStatus.textContent = data.pagination.totalProducts != null
-      ? `${data.pagination.totalProducts} product${data.pagination.totalProducts !== 1 ? 's' : ''} found`
+      ? `${data.pagination.totalProducts} ${data.pagination.totalProducts === 1 ? 'título encontrado' : 'títulos encontrados'}`
       : '';
 
     if (data.stockWarning) {
@@ -91,7 +91,7 @@ async function loadProducts({ resetPage = false } = {}) {
     history.pushState(null, '', `?${params.toString()}`);
   } catch (error) {
     console.error(error);
-    filterStatus.textContent = 'Could not load products at this moment.';
+    filterStatus.textContent = 'Não foi possível carregar o acervo neste momento.';
   }
 }
 
@@ -130,25 +130,37 @@ const modalContent = document.getElementById('modalContent');
 
 function openQuickView(item) {
   const isSoldOut = item.stock <= 0;
-  const categoryName = item.category ? item.category.name : '—';
+  const categoryName = item.category ? item.category.name : 'Geral';
   
   modalContent.innerHTML = `
-    <img src="${resolveImage(item.image)}" alt="${item.name}"
-         class="w-full aspect-[2/3] object-contain bg-white rounded-lg ${isSoldOut ? 'grayscale' : ''}" />
-    <div class="flex flex-col gap-3">
-      <span class="inline-block w-fit bg-[#eee] text-[#555] text-xs font-medium px-2.5 py-1 rounded-full">${categoryName}</span>
-      <h3 class="text-2xl font-bold text-[#111]">${item.name}</h3>
-      <p class="text-sm text-[#666] leading-relaxed">${item.description || ''}</p>
-      <h4 class="text-brandpink font-bold text-2xl">R$ ${formatPrice(item.price)}</h4>
-      <p class="text-xs text-[#888]">${isSoldOut ? 'Sold Out' : `${item.stock} unit${item.stock !== 1 ? 's' : ''} in stock`}</p>
-      <div class="flex flex-col gap-2 mt-2">
+    <div class="relative bg-[#f8f6f2] rounded-2xl p-6 flex items-center justify-center overflow-hidden border border-[#e8e4de]">
+      <img src="${resolveImage(item.image)}" alt="${item.name}"
+           class="w-full max-h-[380px] object-contain ${isSoldOut ? 'grayscale' : ''}" />
+      ${isSoldOut ? '<span class="absolute top-3 left-3 bg-red-600 text-white text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider">Esgotado</span>' : ''}
+    </div>
+    <div class="flex flex-col gap-3.5">
+      <div>
+        <span class="inline-block text-[11px] font-semibold uppercase tracking-wider px-3 py-1 rounded-full bg-[#f0ece6] text-[#635f6d] mb-2">${categoryName}</span>
+        <h3 class="font-poppins text-2xl font-bold text-[#111215] leading-snug">${item.name}</h3>
+      </div>
+      <p class="text-sm text-[#5c5b64] leading-relaxed">${item.description || 'Sem descrição cadastrada para este volume.'}</p>
+      
+      <div class="py-2 border-y border-[#f0ece6]">
+        <span class="text-xs text-[#8a8793] uppercase font-semibold tracking-wider block">Preço à vista</span>
+        <h4 class="font-poppins text-brandpink font-extrabold text-3xl">R$ ${formatPrice(item.price)}</h4>
+        <p class="text-xs text-[#7c7a84] mt-1 font-medium">
+          ${isSoldOut ? '⚠️ Item atualmente esgotado no estoque' : `✓ ${item.stock} ${item.stock === 1 ? 'unidade disponível' : 'unidades disponíveis'} para pronta entrega`}
+        </p>
+      </div>
+
+      <div class="flex flex-col gap-2.5 mt-2">
         ${isSoldOut
-          ? `<button class="w-full bg-[#ccc] text-white text-sm font-semibold px-5 py-2.5 rounded-lg cursor-not-allowed" disabled>Unavailable</button>`
+          ? `<button class="w-full bg-[#e8e4de] text-[#999] text-sm font-semibold px-5 py-3 rounded-xl cursor-not-allowed" disabled>Volume Indisponível</button>`
           : `
-            <button data-action="buy" data-id="${item.id}" class="w-full bg-[#111] hover:bg-black text-white text-sm font-semibold px-5 py-2.5 rounded-lg transition-colors">Buy Now</button>
-            <button data-action="add" data-id="${item.id}" class="w-full bg-brandpink hover:bg-brandpink-hover text-white text-sm font-semibold px-5 py-2.5 rounded-lg transition-colors">Add to Cart</button>
+            <button data-action="buy" data-id="${item.id}" class="w-full bg-[#111215] hover:bg-black text-white text-sm font-semibold px-5 py-3 rounded-xl shadow-md transition-all active:scale-[0.98] cursor-pointer">Comprar Agora</button>
+            <button data-action="add" data-id="${item.id}" class="w-full bg-brandpink hover:bg-brandpink-hover text-white text-sm font-semibold px-5 py-3 rounded-xl shadow-md shadow-brandpink/20 transition-all active:scale-[0.98] cursor-pointer">+ Adicionar ao Carrinho</button>
           `}
-        <a href="/pages/details/details.html?id=${item.id}" class="text-center text-sm text-[#666] underline underline-offset-2 mt-1">View full product page</a>
+        <a href="/pages/details/details.html?id=${item.id}" class="text-center text-xs font-semibold text-[#5c5b64] hover:text-[#111215] underline underline-offset-4 mt-2 transition-colors">Ver página completa com sinopse e detalhes →</a>
       </div>
     </div>`;
     

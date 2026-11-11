@@ -15,8 +15,9 @@ const imagemInput = document.getElementById('image');
 const previewImagem = document.getElementById('previewImagem');
 
 function resolverImagemLocal(imagem) {
-  if (!imagem) return '/images/sem-foto.jpg';
-  return imagem.startsWith('http') ? imagem : '/images/' + imagem;
+  if (!imagem || imagem === 'sem-foto.jpg') return '/assets/public/images/manga&lamenlogo.webp';
+  if (imagem.startsWith('http') || imagem.startsWith('/')) return imagem;
+  return '/assets/public/images/' + imagem;
 }
 
 imagemInput.addEventListener('input', function () {

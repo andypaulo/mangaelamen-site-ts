@@ -1,8 +1,8 @@
-   
+﻿   
    // src/frontend/pages/login/auth.js
 //
-// Um único arquivo pra login.js + register.js, já que os dois forms vivem
-// na mesma página e só um fica visível por vez.
+// Um Ãºnico arquivo pra login.js + register.js, jÃ¡ que os dois forms vivem
+// na mesma pÃ¡gina e sÃ³ um fica visÃ­vel por vez.
 
 const loginForm = document.getElementById('loginForm');
 const registerForm = document.getElementById('registerForm');
@@ -25,7 +25,7 @@ function mostrarLogin(e) {
 linkMostrarRegistro.addEventListener('click', mostrarRegistro);
 linkMostrarLogin.addEventListener('click', mostrarLogin);
 
-// ---------- Helpers de erro (cada form tem seu próprio <p id="...Erro">) ----------
+// ---------- Helpers de erro (cada form tem seu prÃ³prio <p id="...Erro">) ----------
 function mostrarErro(elId, mensagem) {
   const el = document.getElementById(elId);
   el.textContent = mensagem;
@@ -69,13 +69,12 @@ loginForm.addEventListener('submit', async (e) => {
 
     if (!response.ok) {
       // auth-controller.login manda 401 com { message: 'Invalid email or password' }
-      mostrarErro('loginErro', data?.message || 'Não foi possível entrar.');
+      mostrarErro('loginErro', data?.message || 'NÃ£o foi possÃ­vel entrar.');
       return;
     }
    // O login devolve { token, user: { id, name, email, role } }.
     // Guardamos o token pra usar no header "Authorization: Bearer ..." das
-    // próximas chamadas (carrinho, checkout, etc).
-    localStorage.setItem('token', data.token);
+    // prÃ³ximas chamadas (carrinho, checkout, etc).
     localStorage.setItem('user', JSON.stringify(data.user));
 
     // Admin cai no painel, cliente comum cai na vitrine.
@@ -84,7 +83,7 @@ loginForm.addEventListener('submit', async (e) => {
       : '/pages/vitrine/index.html';
   } catch (error) {
     console.error(error);
-    mostrarErro('loginErro', 'Erro de conexão com o servidor.');
+    mostrarErro('loginErro', 'Erro de conexÃ£o com o servidor.');
   } finally {
     btnLogin.disabled = false;
     btnLogin.textContent = 'Fazer login';
@@ -116,7 +115,7 @@ registerForm.addEventListener('submit', async (e) => {
   }
 
   if (password !== confirmPassword) {
-    mostrarErro('formErro', 'As senhas não coincidem.');
+    mostrarErro('formErro', 'As senhas nÃ£o coincidem.');
     return;
   }
 
@@ -134,28 +133,28 @@ registerForm.addEventListener('submit', async (e) => {
 
     if (!response.ok) {
       // 409 -> { message: 'Email already registered' }; 400 -> campo faltando
-      mostrarErro('formErro', data?.message || 'Não foi possível criar a conta.');
+      mostrarErro('formErro', data?.message || 'NÃ£o foi possÃ­vel criar a conta.');
       return;
     }
 
-    // register não devolve token (só login devolve) — então volta pro form
-    // de login já com o e-mail preenchido, em vez de tentar logar sozinho.
+    // register nÃ£o devolve token (sÃ³ login devolve) â€” entÃ£o volta pro form
+    // de login jÃ¡ com o e-mail preenchido, em vez de tentar logar sozinho.
     registerForm.reset();
     mostrarLogin();
     document.getElementById('loginEmail').value = email;
-    mostrarErro('loginErro', 'Conta criada com sucesso! Faça login para continuar.');
+    mostrarErro('loginErro', 'Conta criada com sucesso! FaÃ§a login para continuar.');
     document.getElementById('loginErro').classList.remove('text-red-600');
     document.getElementById('loginErro').classList.add('text-green-600');
   } catch (error) {
     console.error(error);
-    mostrarErro('formErro', 'Erro de conexão com o servidor.');
+    mostrarErro('formErro', 'Erro de conexÃ£o com o servidor.');
   } finally {
     btnRegistrar.disabled = false;
     btnRegistrar.textContent = 'Criar conta';
   }
 });
 
-// ---------- Se veio de um redirect com ?email=..., pré-preenche o login ----------
+// ---------- Se veio de um redirect com ?email=..., prÃ©-preenche o login ----------
 const params = new URLSearchParams(window.location.search);
 const emailPreenchido = params.get('email');
 if (emailPreenchido) {

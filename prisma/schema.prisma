@@ -46,6 +46,7 @@ model Product {
   category    Category    @relation(fields: [categoryId], references: [id])
   createdAt   DateTime    @default(now()) @map("created_at")
   updatedAt   DateTime    @updatedAt @map("updated_at")
+  deletedAt   DateTime?   @map("deleted_at")
   cartItems   CartItem[]
   orderItems  OrderItem[]
 
@@ -95,7 +96,7 @@ model OrderItem {
   productId Int      @map("product_id")
   product   Product  @relation(fields: [productId], references: [id])
   quantity  Int
-  priceAtPurchase Float @map("price_at_purchase") // Evita falha de segurança se o preço do produto mudar amanhã
+  priceAtPurchase Float @map("price_at_purchase") // Evita falha de seguranÃ§a se o preÃ§o do produto mudar amanhÃ£
 
   @@map("order_items")
 }

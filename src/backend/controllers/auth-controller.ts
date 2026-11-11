@@ -1,4 +1,4 @@
-import { FastifyRequest, FastifyReply } from 'fastify';
+﻿import { FastifyRequest, FastifyReply } from 'fastify';
 import bcrypt from 'bcrypt';
 import { prisma } from '../config/database.js';
 import { AppError } from '../utils/app-error.js';
@@ -63,7 +63,6 @@ export const authController = {
 
     return reply.status(200).send({
       message: 'Login successful',
-      token,
       user: { id: user.id, name: user.name, email: user.email, role: user.role }
     });
   },
