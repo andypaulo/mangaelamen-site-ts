@@ -81,9 +81,11 @@ function updateAdminVisibility(user) {
   if (user && user.role === 'ADMIN') {
     adminLink.classList.remove('hidden');
     adminLink.classList.add('flex');
+    adminLink.style.display = 'flex';
   } else {
     adminLink.classList.add('hidden');
     adminLink.classList.remove('flex');
+    adminLink.style.display = 'none';
   }
 }
 
