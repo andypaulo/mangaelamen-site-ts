@@ -66,7 +66,7 @@ server.register(categoryRoutes, { prefix: '/api' });
 
 
 
-// Centraliza todo tratamento de erro â€” controllers nÃ£o precisam mais de try/catch
+// Centraliza todo tratamento de erro — controllers não precisam mais de try/catch
 server.setErrorHandler((error: FastifyError, request, reply) => {
   if (error instanceof AppError) {
     return reply.status(error.statusCode).send({ message: error.message });
@@ -74,6 +74,11 @@ server.setErrorHandler((error: FastifyError, request, reply) => {
 
   if (error.validation) {
     return reply.status(400).send({ message: 'Invalid request data', details: error.validation });
+  }
+
+  // Respeita o status de erros de cliente (4xx) gerados pelo Fastify (ex: JSON body vazio, rota não encontrada, etc.)
+  if (error.statusCode && error.statusCode >= 400 && error.statusCode < 500) {
+    return reply.status(error.statusCode).send({ message: error.message });
   }
 
   request.log.error(error);
