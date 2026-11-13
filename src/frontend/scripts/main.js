@@ -208,13 +208,17 @@ async function buyNow(productId) {
     });
     if (response.ok) {
       window.location.href = '/pages/cart/cart.html';
+    } else if (response.status === 401) {
+      if (confirm('Você precisa estar logado para comprar. Deseja entrar na sua conta agora?')) {
+        window.location.href = '/pages/login/login.html';
+      }
     } else {
-      const errorText = await response.text();
-      alert(errorText || 'Error starting the checkout process.');
+      const data = await response.json().catch(() => null);
+      alert(data?.message || 'Erro ao iniciar processo de compra do produto.');
     }
   } catch (error) {
     console.error(error);
-    alert('Server connection error.');
+    alert('Erro de conexão com o servidor.');
   }
 }
 
@@ -226,14 +230,18 @@ async function addToCart(productId) {
       body: JSON.stringify({ productId }),
     });
     if (response.ok) {
-      alert('Product added to the cart!');
+      alert('Produto adicionado ao carrinho com sucesso!');
+    } else if (response.status === 401) {
+      if (confirm('Você precisa estar logado para adicionar produtos ao carrinho. Deseja entrar na sua conta agora?')) {
+        window.location.href = '/pages/login/login.html';
+      }
     } else {
-      const errorText = await response.text();
-      alert(errorText || 'Error adding product.');
+      const data = await response.json().catch(() => null);
+      alert(data?.message || 'Erro ao adicionar produto.');
     }
   } catch (error) {
     console.error(error);
-    alert('Server connection error.');
+    alert('Erro de conexão com o servidor.');
   }
 }
 

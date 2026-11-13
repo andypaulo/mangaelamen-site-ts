@@ -102,10 +102,14 @@ async function buyNow(productId) {
       body: JSON.stringify({ productId }),
     });
     if (response.ok) {
-      // Ajuste aqui se a sua página de carrinho for cart.html em vez de carrinho.html
       window.location.href = '/pages/cart/cart.html';
+    } else if (response.status === 401) {
+      if (confirm('Você precisa estar logado para comprar. Deseja entrar na sua conta agora?')) {
+        window.location.href = '/pages/login/login.html';
+      }
     } else {
-      alert('Erro ao iniciar processo de compra do produto.');
+      const data = await response.json().catch(() => null);
+      alert(data?.message || 'Erro ao iniciar processo de compra do produto.');
     }
   } catch (error) {
     console.error(error);
@@ -121,9 +125,14 @@ async function addToCart(productId) {
       body: JSON.stringify({ productId }),
     });
     if (response.ok) {
-      alert('Produto adicionado ao carrinho!');
+      alert('Produto adicionado ao carrinho com sucesso!');
+    } else if (response.status === 401) {
+      if (confirm('Você precisa estar logado para adicionar produtos ao carrinho. Deseja entrar na sua conta agora?')) {
+        window.location.href = '/pages/login/login.html';
+      }
     } else {
-      alert('Erro ao adicionar produto.');
+      const data = await response.json().catch(() => null);
+      alert(data?.message || 'Erro ao adicionar produto.');
     }
   } catch (error) {
     console.error(error);
