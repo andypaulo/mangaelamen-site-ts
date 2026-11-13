@@ -115,16 +115,20 @@ export const productController = {
       throw new AppError('Invalid product ID', 400);
     }
 
-    const product = await prisma.product.findUnique({ where: { id: productId } });
-    if (!product || product.deletedAt) {
+    const result = await prisma.product.updateMany({
+      where: {
+        id: productId,
+        deletedAt: null
+      },
+      data: {
+        deletedAt: new Date()
+      }
+    });
+
+    if (result.count === 0) {
       throw new AppError('Product not found', 404);
     }
 
-    if (product.stock > 0) {
-      throw new AppError('It is not allowed to delete a product with stock greater than zero.', 400);
-    }
-
-    await prisma.product.update({ where: { id: productId }, data: { deletedAt: new Date() } });
     return reply.status(200).send({ message: 'Product successfully removed' });
   }
 };

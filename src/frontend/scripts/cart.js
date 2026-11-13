@@ -321,8 +321,7 @@ if (elements.btnFinalizar) {
 
     try {
       const response = await fetch('/api/cart/checkout', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' }
+        method: 'POST'
       });
 
       if (response.ok) {
