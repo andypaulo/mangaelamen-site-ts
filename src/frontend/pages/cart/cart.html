@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Meu Carrinho — Manga & Lamen</title>
+  <meta name="description" content="Revise seus mangás selecionados, ajuste quantidades e conclua seu pedido com segurança na Manga & Lamen." />
+  <meta name="page-type" content="cart" />
+  <meta name="site-kind" content="store" />
+
+  <link rel="stylesheet" href="/css/style.css" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600;700&display=swap"
+    rel="stylesheet"
+  />
+
+  <link rel="icon" type="image/x-icon" href="/assets/public/images/manga&lamenlogo.webp" />
+</head>
+<body class="font-inter bg-[#fbf9f5] text-[#1c1c1f] antialiased selection:bg-brandpink selection:text-white pb-24">
+
+  <!-- ===================== HEADER & NAV GLOBAIS ===================== -->
+  <div data-include="/components/layout/header.html"></div>
+  <div data-include="/components/layout/nav.html"></div>
+
+  <main role="main" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8">
+
+    <!-- Navegação de volta e Cabeçalho da Página -->
+    <div class="mb-8 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 border-b border-[#e8e4de] pb-6">
+      <div>
+        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-black/5 text-[#444] text-xs font-semibold tracking-wider uppercase mb-2">
+          <span class="w-2 h-2 rounded-full bg-brandpink"></span>
+          Etapa de Compra
+        </div>
+        <h1 class="font-poppins text-3xl sm:text-4xl font-extrabold text-[#111215] tracking-tight">
+          Meu Carrinho
+        </h1>
+        <p class="text-sm text-[#5c5b64] mt-1">
+          Confira os volumes escolhidos antes de finalizar sua compra.
+        </p>
+      </div>
+
+      <a
+        href="/pages/vitrine/index.html"
+        class="inline-flex items-center gap-2 text-sm font-semibold text-[#5c5b64] hover:text-[#111215] transition-colors group self-start sm:self-auto"
+      >
+        <span class="transition-transform group-hover:-translate-x-1">←</span>
+        Continuar comprando
+      </a>
+    </div>
+
+    <!-- Feedback / Alertas de Sistema -->
+    <div id="cartAlert" class="hidden mb-6 p-4 rounded-xl text-sm font-medium border flex items-center justify-between gap-3 animate-in fade-in">
+      <span id="cartAlertMessage"></span>
+      <button type="button" id="cartAlertClose" class="text-xs font-bold underline cursor-pointer">Fechar</button>
+    </div>
+
+    <!-- Layout Principal: Lista de Itens (Esq) + Resumo (Dir) -->
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+
+      <!-- ================= COLUNA DOS ITENS (8 cols) ================= -->
+      <section class="lg:col-span-8 flex flex-col gap-4">
+        
+        <!-- Lista Dinâmica de Itens -->
+        <div id="cartItemsList" class="flex flex-col gap-4">
+          <!-- Renderizado via cart.js -->
+        </div>
+
+        <!-- Estado de Carregamento (Skeleton) -->
+        <div id="cartLoadingState" class="bg-white border border-[#e8e4de] rounded-2xl p-8 text-center text-[#7c7a84] flex flex-col items-center justify-center gap-3">
+          <div class="w-8 h-8 border-3 border-brandpink border-t-transparent rounded-full animate-spin"></div>
+          <p class="text-sm font-medium">Carregando seus mangás...</p>
+        </div>
+
+        <!-- Estado de Carrinho Vazio -->
+        <div id="cartEmptyState" class="hidden bg-white border border-[#e8e4de] rounded-2xl p-12 text-center flex flex-col items-center justify-center gap-4">
+          <div class="w-20 h-20 rounded-full bg-[#f4f1eb] flex items-center justify-center text-4xl mb-2">
+            🛒
+          </div>
+          <h2 class="font-poppins text-2xl font-bold text-[#111215]">Seu carrinho está vazio</h2>
+          <p class="text-sm text-[#5c5b64] max-w-md">
+            Você ainda não adicionou nenhum mangá ao seu carrinho. Explore nosso catálogo de exemplares originais e colecionáveis!
+          </p>
+          <a
+            href="/pages/vitrine/index.html"
+            class="mt-2 inline-flex items-center gap-2 bg-[#111215] hover:bg-black text-white text-sm font-semibold px-6 py-3 rounded-xl shadow-md transition-all active:scale-95"
+          >
+            Explorar Vitrine de Mangás →
+          </a>
+        </div>
+
+        <!-- Estado de Não Autenticado -->
+        <div id="cartUnauthenticatedState" class="hidden bg-white border border-[#e8e4de] rounded-2xl p-12 text-center flex flex-col items-center justify-center gap-4">
+          <div class="w-20 h-20 rounded-full bg-amber-50 text-amber-600 flex items-center justify-center text-3xl mb-2">
+            🔒
+          </div>
+          <h2 class="font-poppins text-2xl font-bold text-[#111215]">Entre na sua conta</h2>
+          <p class="text-sm text-[#5c5b64] max-w-md">
+            Para visualizar seu carrinho e sincronizar seus itens com segurança, por favor faça login na sua conta da Manga & Lamen.
+          </p>
+          <a
+            href="/pages/login/login.html"
+            class="mt-2 inline-flex items-center gap-2 bg-brandpink hover:bg-brandpink-hover text-white text-sm font-semibold px-6 py-3 rounded-xl shadow-md shadow-brandpink/20 transition-all active:scale-95"
+          >
+            Fazer Login ou Criar Conta →
+          </a>
+        </div>
+
+      </section>
+
+      <!-- ================= COLUNA DO RESUMO (4 cols) ================= -->
+      <aside class="lg:col-span-4 sticky top-6">
+        <div class="bg-white border border-[#e8e4de] rounded-2xl p-6 sm:p-7 shadow-xs">
+          
+          <h2 class="font-poppins text-xl font-bold text-[#111215] pb-4 border-b border-[#f0ece6]">
+            Resumo do Pedido
+          </h2>
+
+          <div class="flex flex-col gap-3 py-5 text-sm">
+            <div class="flex justify-between items-center text-[#5c5b64]">
+              <span>Subtotal (<span id="summaryTotalItems">0</span> <span id="summaryItemsWord">itens</span>)</span>
+              <span id="summarySubtotal" class="font-medium text-[#111215]">R$ 0,00</span>
+            </div>
+
+            <div class="flex justify-between items-center text-[#5c5b64]">
+              <span>Envio &amp; Frete</span>
+              <span class="font-semibold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded text-xs">Grátis</span>
+            </div>
+
+            <div class="flex justify-between items-center text-[#5c5b64]">
+              <span>Impostos</span>
+              <span class="text-xs text-[#8a8793]">Calculado ao finalizar</span>
+            </div>
+
+            <div class="pt-4 mt-2 border-t border-[#f0ece6] flex justify-between items-baseline">
+              <span class="font-poppins font-bold text-base text-[#111215]">Total</span>
+              <span id="summaryTotal" class="font-poppins font-extrabold text-3xl text-brandpink">R$ 0,00</span>
+            </div>
+          </div>
+
+          <button
+            type="button"
+            id="btnFinalizar"
+            class="w-full bg-[#111215] hover:bg-black text-white text-base font-semibold px-5 py-4 rounded-xl shadow-lg transition-all active:scale-[0.98] cursor-pointer disabled:bg-[#d8d4cd] disabled:text-[#888] disabled:cursor-not-allowed disabled:shadow-none flex items-center justify-center gap-2 mt-2"
+          >
+            <span>Finalizar Compra</span>
+            <span class="text-xs bg-white/20 px-2 py-0.5 rounded-full font-normal">→</span>
+          </button>
+
+          <!-- Selos de Confiança -->
+          <div class="mt-6 pt-5 border-t border-[#f0ece6] flex flex-col gap-2.5 text-xs text-[#635f6d]">
+            <div class="flex items-center gap-2">
+              <span class="text-emerald-600 font-bold">✓</span>
+              <span>Compra 100% segura e protegida</span>
+            </div>
+            <div class="flex items-center gap-2">
+              <span class="text-emerald-600 font-bold">✓</span>
+              <span>Embalagem reforçada anti-impacto</span>
+            </div>
+            <div class="flex items-center gap-2">
+              <span class="text-emerald-600 font-bold">✓</span>
+              <span>Garantia de integridade ou seu dinheiro de volta</span>
+            </div>
+          </div>
+
+        </div>
+      </aside>
+
+    </div>
+
+  </main>
+
+  <!-- Scripts do Ecossistema -->
+  <script src="/scripts/include-layout.js"></script>
+  <script src="/scripts/nav-active.js"></script>
+  <script src="/scripts/header-search.js"></script>
+  <script src="/scripts/nav-auth.js"></script>
+  <script src="/scripts/auth.js"></script>
+  <script type="module" src="/scripts/cart.js"></script>
+</body>
+</html>
