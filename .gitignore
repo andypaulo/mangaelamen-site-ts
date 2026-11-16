@@ -4,6 +4,8 @@ node_modules
 
 /src/generated/prisma
 prisma/database.db
+prisma/database.db.bak
+*.db.bak
 src/backend/generated/
 dist/
 dist-front/

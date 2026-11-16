@@ -78,13 +78,14 @@ model CartItem {
 }
 
 model Order {
-  id         String      @id @default(uuid())
-  userId     String      @map("user_id")
-  user       User        @relation(fields: [userId], references: [id])
-  totalPrice Float       @map("total_price")
-  status     String      @default("PENDING") // PENDING, PAID, CANCELED
-  createdAt  DateTime    @default(now()) @map("created_at")
-  items      OrderItem[]
+  id           String             @id @default(uuid())
+  userId       String             @map("user_id")
+  user         User               @relation(fields: [userId], references: [id])
+  totalPrice   Float              @map("total_price")
+  status       String             @default("CONFIRMED") // CONFIRMED, PREPARING, SHIPPED, DELIVERED
+  createdAt    DateTime           @default(now()) @map("created_at")
+  items        OrderItem[]
+  statusEvents OrderStatusEvent[]
 
   @@map("orders")
 }
@@ -99,4 +100,14 @@ model OrderItem {
   priceAtPurchase Float @map("price_at_purchase") // Evita falha de seguranÃ§a se o preÃ§o do produto mudar amanhÃ£
 
   @@map("order_items")
+}
+
+model OrderStatusEvent {
+  id        String   @id @default(uuid())
+  orderId   String   @map("order_id")
+  order     Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  status    String
+  createdAt DateTime @default(now()) @map("created_at")
+
+  @@map("order_status_events")
 }

@@ -328,10 +328,15 @@ export const cartController = {
         data: {
           userId,
           totalPrice: Number(totalOrderPrice.toFixed(2)),
-          status: 'PAID',
-          items: { createMany: { data: orderItemsData } }
+          status: 'CONFIRMED',
+          items: { createMany: { data: orderItemsData } },
+          statusEvents: {
+            create: [
+              { status: 'CONFIRMED' }
+            ]
+          }
         },
-        include: { items: true }
+        include: { items: true, statusEvents: true }
       });
 
       // Limpa todos os itens do carrinho após a compra

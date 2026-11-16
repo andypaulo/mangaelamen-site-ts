@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Minhas Compras — Manga & Lamen</title>
+  <meta name="description" content="Acompanhe o histórico de pedidos e o estado de entrega dos seus mangás na Manga & Lamen." />
+  <meta name="page-type" content="orders" />
+  <meta name="site-kind" content="store" />
+
+  <link rel="stylesheet" href="/css/style.css" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600;700&display=swap"
+    rel="stylesheet"
+  />
+
+  <link rel="icon" type="image/png" href="/assets/public/images/manga&lamenlogo.png" />
+</head>
+<body class="font-inter bg-[#fbf9f5] text-[#1c1c1f] antialiased selection:bg-brandpink selection:text-white pb-24">
+
+  <!-- ===================== HEADER & NAV GLOBAIS ===================== -->
+  <div data-include="/components/layout/header.html"></div>
+  <div data-include="/components/layout/nav.html"></div>
+
+  <main role="main" class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 pt-8">
+
+    <!-- Cabeçalho da Página -->
+    <div class="mb-8 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 border-b border-[#e8e4de] pb-6">
+      <div>
+        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-black/5 text-[#444] text-xs font-semibold tracking-wider uppercase mb-2">
+          <span class="w-2 h-2 rounded-full bg-brandpink"></span>
+          Histórico de Pedidos
+        </div>
+        <h1 class="font-poppins text-3xl sm:text-4xl font-extrabold text-[#111215] tracking-tight">
+          Minhas Compras
+        </h1>
+        <p class="text-sm text-[#5c5b64] mt-1">
+          Acompanhe o estado de preparação e envio de cada um dos seus pedidos.
+        </p>
+      </div>
+
+      <a
+        href="/pages/vitrine/index.html"
+        class="inline-flex items-center gap-2 text-sm font-semibold text-[#5c5b64] hover:text-[#111215] transition-colors group self-start sm:self-auto"
+      >
+        <span class="transition-transform group-hover:-translate-x-1">←</span>
+        Explorar mais mangás
+      </a>
+    </div>
+
+    <!-- Feedback / Alertas de Sistema -->
+    <div id="ordersAlert" class="hidden mb-6 p-4 rounded-xl text-sm font-medium border flex items-center justify-between gap-3 animate-in fade-in">
+      <span id="ordersAlertMessage"></span>
+      <button type="button" id="ordersAlertClose" class="text-xs font-bold underline cursor-pointer">Fechar</button>
+    </div>
+
+    <!-- Estado de Carregamento (Skeleton) -->
+    <div id="ordersLoadingState" class="bg-white border border-[#e8e4de] rounded-2xl p-12 text-center text-[#7c7a84] flex flex-col items-center justify-center gap-3">
+      <div class="w-8 h-8 border-3 border-brandpink border-t-transparent rounded-full animate-spin"></div>
+      <p class="text-sm font-medium">Carregando suas compras...</p>
+    </div>
+
+    <!-- Estado de Não Autenticado (Padrão do Carrinho) -->
+    <div id="ordersUnauthenticatedState" class="hidden bg-white border border-[#e8e4de] rounded-2xl p-12 text-center flex flex-col items-center justify-center gap-4">
+      <div class="w-20 h-20 rounded-full bg-amber-50 text-amber-600 flex items-center justify-center text-3xl mb-2">
+        🔒
+      </div>
+      <h2 class="font-poppins text-2xl font-bold text-[#111215]">Entre na sua conta</h2>
+      <p class="text-sm text-[#5c5b64] max-w-md">
+        Para visualizar o histórico das suas compras e acompanhar suas entregas, por favor faça login na Manga & Lamen.
+      </p>
+      <a
+        href="/pages/login/login.html"
+        class="mt-2 inline-flex items-center gap-2 bg-brandpink hover:bg-brandpink-hover text-white text-sm font-semibold px-6 py-3 rounded-xl shadow-md shadow-brandpink/20 transition-all active:scale-95"
+      >
+        Fazer Login ou Criar Conta →
+      </a>
+    </div>
+
+    <!-- Estado Vazio (Nenhuma compra realizada) -->
+    <div id="ordersEmptyState" class="hidden bg-white border border-[#e8e4de] rounded-2xl p-12 text-center flex flex-col items-center justify-center gap-4">
+      <div class="w-20 h-20 rounded-full bg-[#f4f1eb] flex items-center justify-center text-4xl mb-2">
+        📦
+      </div>
+      <h2 class="font-poppins text-2xl font-bold text-[#111215]">Nenhum pedido encontrado</h2>
+      <p class="text-sm text-[#5c5b64] max-w-md">
+        Você ainda não realizou compras conosco. Explore nossa vitrine de mangás colecionáveis e faça seu primeiro pedido!
+      </p>
+      <a
+        href="/pages/vitrine/index.html"
+        class="mt-2 inline-flex items-center gap-2 bg-[#111215] hover:bg-black text-white text-sm font-semibold px-6 py-3 rounded-xl shadow-md transition-all active:scale-95"
+      >
+        Explorar Vitrine de Mangás →
+      </a>
+    </div>
+
+    <!-- Lista de Cartões de Pedidos -->
+    <div id="ordersList" class="flex flex-col gap-6">
+      <!-- Renderizado dinamicamente via orders.js -->
+    </div>
+
+  </main>
+
+  <!-- Scripts -->
+  <script src="/scripts/include-layout.js"></script>
+  <script src="/scripts/nav-active.js"></script>
+  <script src="/scripts/header-search.js"></script>
+  <script src="/scripts/auth.js"></script>
+  <script src="/scripts/nav-auth.js"></script>
+  <script src="/scripts/orders.js"></script>
+</body>
+</html>
