@@ -325,9 +325,7 @@ if (elements.btnFinalizar) {
       });
 
       if (response.ok) {
-        const resultado = await response.json();
-        alert('Compra efetuada com sucesso! ' + (resultado.mensagem || resultado.message || ''));
-        window.location.reload();
+        window.location.href = '/pages/orders/orders.html';
       } else {
         const data = await response.json().catch(() => ({}));
         const erroMsg = data.message || (await response.text()) || 'Erro ao processar pedido.';

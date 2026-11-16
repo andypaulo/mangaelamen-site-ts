@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Gerenciamento de Pedidos — Manga & Lamen Admin</title>
+  <script src="/scripts/admin-guard.js"></script>
+  <link rel="stylesheet" href="../../css/style.css" />
+</head>
+<body class="font-poppins bg-[#f2f2f2] pb-[60px]">
+
+  <div data-include="/components/layout/header.html"></div>
+  <div data-include="/components/layout/nav.html"></div>
+
+  <main role="main">
+    <div class="max-w-7xl mx-auto px-5 py-8">
+
+      <!-- Cabeçalho com navegação de retorno -->
+      <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
+        <div>
+          <div class="flex items-center gap-2 mb-1">
+            <a href="/pages/admin/admin.html" class="text-xs font-semibold text-[#666] hover:text-[#111] no-underline">
+              ← Voltar ao Catálogo
+            </a>
+          </div>
+          <h1 class="text-2xl font-bold text-[#111]">Gerenciamento de Pedidos</h1>
+          <p class="text-sm text-[#666] mt-1">Acompanhe as compras dos clientes e avance o fluxo de entrega dos pedidos.</p>
+        </div>
+
+        <button type="button" id="btnReloadOrders" class="inline-flex items-center justify-center gap-2 transition-colors duration-200 text-sm font-semibold px-4 py-2.5 rounded-lg bg-white border border-[#ddd] hover:bg-[#fafafa] text-[#333] cursor-pointer">
+          ↻ Atualizar Lista
+        </button>
+      </div>
+
+      <!-- Alertas de Feedback -->
+      <div id="flashSuccess" class="hidden bg-green-50 border border-green-200 text-green-800 rounded-lg px-4 py-3 mb-4 items-center gap-2">
+        <span>✅</span><span id="flashSuccessText"></span>
+      </div>
+      <div id="flashError" class="hidden bg-red-50 border border-red-200 text-red-800 rounded-lg px-4 py-3 mb-4 items-center gap-2">
+        <span>⚠️</span><span id="flashErrorText"></span>
+      </div>
+
+      <!-- Cards de Métricas de Pedidos -->
+      <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+        <div class="bg-white rounded-xl shadow-sm p-5">
+          <p class="text-xs font-semibold text-[#888] uppercase tracking-wide mb-1">Total de Pedidos</p>
+          <p id="statTotalOrders" class="text-2xl font-bold text-[#111]">0</p>
+        </div>
+        <div class="bg-white rounded-xl shadow-sm p-5">
+          <p class="text-xs font-semibold text-[#888] uppercase tracking-wide mb-1">Confirmados</p>
+          <p id="statConfirmed" class="text-2xl font-bold text-blue-600">0</p>
+        </div>
+        <div class="bg-white rounded-xl shadow-sm p-5">
+          <p class="text-xs font-semibold text-[#888] uppercase tracking-wide mb-1">Em Preparação / Enviados</p>
+          <p id="statInTransit" class="text-2xl font-bold text-amber-500">0</p>
+        </div>
+        <div class="bg-white rounded-xl shadow-sm p-5">
+          <p class="text-xs font-semibold text-[#888] uppercase tracking-wide mb-1">Entregues</p>
+          <p id="statDelivered" class="text-2xl font-bold text-emerald-600">0</p>
+        </div>
+      </div>
+
+      <!-- Tabela de Pedidos -->
+      <div class="bg-white rounded-xl shadow-sm overflow-x-auto">
+        <table class="w-full text-sm min-w-[800px]">
+          <thead>
+            <tr class="border-b border-[#eee] text-left text-[#666]">
+              <th class="px-4 py-3 font-semibold">Pedido</th>
+              <th class="px-4 py-3 font-semibold">Cliente</th>
+              <th class="px-4 py-3 font-semibold">Data</th>
+              <th class="px-4 py-3 font-semibold">Volumes</th>
+              <th class="px-4 py-3 font-semibold">Total</th>
+              <th class="px-4 py-3 font-semibold">Status Atual</th>
+              <th class="px-4 py-3 font-semibold text-right">Ação de Entrega</th>
+            </tr>
+          </thead>
+          <tbody id="ordersTableBody">
+            <!-- Renderizado dinamicamente via orders-admin.js -->
+          </tbody>
+        </table>
+
+        <div id="emptyOrdersState" class="hidden text-center py-14 text-[#777]">
+          <p class="font-semibold mb-1">Nenhum pedido registrado no sistema</p>
+          <p class="text-sm">Novas compras finalizadas aparecerão listadas aqui automaticamente.</p>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <script src="/scripts/include-layout.js"></script>
+  <script src="/scripts/nav-active.js"></script>
+  <script src="/scripts/header-search.js"></script>
+  <script src="/scripts/auth.js"></script>
+  <script src="/scripts/nav-auth.js"></script>
+  <script src="/scripts/orders-admin.js"></script>
+</body>
+</html>

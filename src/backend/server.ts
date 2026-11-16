@@ -13,6 +13,7 @@ import fastifyCookie from '@fastify/cookie';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import { categoryRoutes } from './routes/category-routes.js';
+import { orderRoutes } from './routes/order-routes.js';
 
 const server = fastify({
   logger: true
@@ -63,6 +64,7 @@ server.register(cartRoutes, { prefix: '/api' });
 server.register(productRoutes, { prefix: '/api' });
 server.register(storefrontRoutes, { prefix: '/api' });
 server.register(categoryRoutes, { prefix: '/api' });
+server.register(orderRoutes, { prefix: '/api' });
 
 
 

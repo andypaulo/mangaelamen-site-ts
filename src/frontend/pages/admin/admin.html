@@ -20,12 +20,17 @@
           <h1 class="text-2xl font-bold text-[#111]">Painel de Gerenciamento</h1>
           <p class="text-sm text-[#666] mt-1">Controle seu catálogo: cadastre, edite e acompanhe o estoque dos produtos.</p>
         </div>
-        <a href="/pages/admin/product/create.html" class="inline-flex items-center justify-center gap-2 transition-colors duration-200 text-base font-semibold px-6 py-3 rounded-lg bg-brandpink hover:bg-brandpink-hover text-white no-underline">
-          Cadastrar Novo Produto
-        </a>
-        <button type="button" id="btnOpenCategoryModal" class="inline-flex items-center justify-center gap-2 transition-colors duration-200 text-base font-semibold px-6 py-3 rounded-lg bg-brandpink hover:bg-brandpink-hover text-white no-underline">
-          Cadastrar Nova Categoria
-        </button>
+        <div class="flex flex-wrap items-center gap-3">
+          <a href="/pages/admin/orders.html" class="inline-flex items-center justify-center gap-2 transition-colors duration-200 text-base font-semibold px-5 py-3 rounded-lg bg-[#111215] hover:bg-black text-white no-underline">
+            📦 Gerenciar Pedidos
+          </a>
+          <a href="/pages/admin/product/create.html" class="inline-flex items-center justify-center gap-2 transition-colors duration-200 text-base font-semibold px-6 py-3 rounded-lg bg-brandpink hover:bg-brandpink-hover text-white no-underline">
+            Cadastrar Novo Produto
+          </a>
+          <button type="button" id="btnOpenCategoryModal" class="inline-flex items-center justify-center gap-2 transition-colors duration-200 text-base font-semibold px-6 py-3 rounded-lg bg-brandpink hover:bg-brandpink-hover text-white no-underline">
+            Cadastrar Nova Categoria
+          </button>
+        </div>
       </div>
 
       <div id="flashSuccess" class="hidden bg-green-50 border border-green-200 text-green-800 rounded-lg px-4 py-3 mb-4 items-center gap-2">
