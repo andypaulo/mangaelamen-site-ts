@@ -220,11 +220,25 @@ async function carregarPedidosAdmin() {
   }
 }
 
+// ==================== INICIALIZAÇÃO COM GUARD ====================
+let _adminOrdersInitialized = false;
+
+async function initAdminOrders() {
+  if (_adminOrdersInitialized) return;
+  _adminOrdersInitialized = true;
+  try {
+    await carregarPedidosAdmin();
+  } catch (e) {
+    _adminOrdersInitialized = false;
+    throw e;
+  }
+}
+
 document.addEventListener('DOMContentLoaded', () => {
-  carregarPedidosAdmin();
+  initAdminOrders();
   const reloadBtn = document.getElementById('btnReloadOrders');
   if (reloadBtn) {
     reloadBtn.addEventListener('click', carregarPedidosAdmin);
   }
 });
-document.addEventListener('layoutReady', carregarPedidosAdmin);
+document.addEventListener('layoutReady', initAdminOrders);

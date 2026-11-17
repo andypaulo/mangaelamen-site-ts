@@ -259,5 +259,19 @@ async function carregarCompras() {
   }
 }
 
-document.addEventListener('DOMContentLoaded', carregarCompras);
-document.addEventListener('layoutReady', carregarCompras);
+// ==================== INICIALIZAÇÃO COM GUARD ====================
+let _ordersInitialized = false;
+
+async function initOrders() {
+  if (_ordersInitialized) return;
+  _ordersInitialized = true;
+  try {
+    await carregarCompras();
+  } catch (e) {
+    _ordersInitialized = false;
+    throw e;
+  }
+}
+
+document.addEventListener('DOMContentLoaded', initOrders);
+document.addEventListener('layoutReady', initOrders);

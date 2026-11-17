@@ -350,7 +350,19 @@ function atualizarResumo(total, totalItens = 0) {
   if (elements.itemsWord) elements.itemsWord.textContent = totalItens === 1 ? 'item' : 'itens';
 }
 
-// Inicializa o carrinho ao carregar o script
-document.addEventListener('DOMContentLoaded', carregarCarrinho);
-// Reexecuta também caso o layout dispare layoutReady
-document.addEventListener('layoutReady', carregarCarrinho);
+// ==================== INICIALIZAÇÃO COM GUARD ====================
+let _cartInitialized = false;
+
+async function initCarrinho() {
+  if (_cartInitialized) return;
+  _cartInitialized = true;
+  try {
+    await carregarCarrinho();
+  } catch (e) {
+    _cartInitialized = false;
+    throw e;
+  }
+}
+
+document.addEventListener('DOMContentLoaded', initCarrinho);
+document.addEventListener('layoutReady', initCarrinho);
