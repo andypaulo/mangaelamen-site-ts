@@ -9,13 +9,19 @@ import { loadProfileSummary } from './profile-summary.js';
 import { initAccountForm } from './profile-account.js';
 import { initSecurityForm } from './profile-security.js';
 
+let isInitialized = false;
+
 async function initProfile() {
+  if (isInitialized) return;
+
   const loadingState = document.getElementById('profileLoadingState');
   const unauthState = document.getElementById('profileUnauthenticatedState');
   const errorState = document.getElementById('profileErrorState');
   const content = document.getElementById('profileContent');
 
   if (!loadingState || !unauthState || !content) return;
+
+  isInitialized = true;
 
   loadingState.classList.remove('hidden');
   unauthState.classList.add('hidden');
@@ -47,6 +53,7 @@ async function initProfile() {
     content.classList.remove('hidden');
   } catch (err) {
     console.error('Falha ao inicializar perfil:', err);
+    isInitialized = false;
     loadingState.classList.add('hidden');
     if (errorState) {
       errorState.classList.remove('hidden');

@@ -36,6 +36,9 @@ export function initSecurityForm() {
   // Toggle de visualização de senhas
   const toggleButtons = document.querySelectorAll('[data-toggle-password]');
   toggleButtons.forEach((btn) => {
+    btn.setAttribute('aria-pressed', 'false');
+    btn.setAttribute('aria-label', 'Mostrar senha');
+
     btn.addEventListener('click', () => {
       const targetId = btn.getAttribute('data-toggle-password');
       const input = document.getElementById(targetId);
@@ -44,6 +47,9 @@ export function initSecurityForm() {
       const isPassword = input.type === 'password';
       input.type = isPassword ? 'text' : 'password';
       btn.textContent = isPassword ? 'Ocultar' : 'Mostrar';
+      btn.setAttribute('aria-pressed', isPassword ? 'true' : 'false');
+      btn.setAttribute('aria-label', isPassword ? 'Ocultar senha' : 'Mostrar senha');
+      input.focus();
     });
   });
 
