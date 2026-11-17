@@ -26,7 +26,8 @@ plugins: [
     rollupOptions: {
       input: {
         main: resolve(__dirname, 'src/frontend/pages/homepage/index.html'),
-        login: resolve(__dirname, 'src/frontend/pages/login/index.html'),
+        login: resolve(__dirname, 'src/frontend/pages/login/login.html'),
+        profile: resolve(__dirname, 'src/frontend/pages/profile/profile.html'),
         // Adicione outras páginas aqui conforme for criando, ex:
         // contato: resolve(__dirname, 'frontend/pages/homepage/contato.html')
       }

@@ -117,3 +117,15 @@ document.addEventListener('layoutReady', async () => {
     }
   }
 });
+
+// Atualiza o header imediatamente quando o perfil salva nome/e-mail (sem exigir novo login)
+window.addEventListener('userUpdated', (event) => {
+  const updatedUser = event.detail;
+  if (!updatedUser) return;
+  localStorage.setItem('user', JSON.stringify(updatedUser));
+  const container = document.getElementById('navAuthArea');
+  if (container) {
+    renderUserMenu(container, updatedUser);
+    updateAdminVisibility(updatedUser);
+  }
+});
