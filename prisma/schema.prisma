@@ -20,6 +20,7 @@ model User {
   deletedAt    DateTime? @map("deleted_at")
   carts        Cart[]
   orders       Order[]
+  addresses    Address[]
 
   @@map("users")
 }
@@ -110,4 +111,25 @@ model OrderStatusEvent {
   createdAt DateTime @default(now()) @map("created_at")
 
   @@map("order_status_events")
+}
+
+model Address {
+  id            String   @id @default(uuid())
+  userId        String   @map("user_id")
+  user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  label         String?  @default("")
+  recipientName String   @map("recipient_name")
+  cep           String
+  street        String
+  number        String
+  complement    String?  @default("")
+  neighborhood  String
+  city          String
+  state         String
+  isDefault     Boolean  @default(false) @map("is_default")
+  createdAt     DateTime @default(now()) @map("created_at")
+  updatedAt     DateTime @updatedAt @map("updated_at")
+
+  @@index([userId])
+  @@map("addresses")
 }

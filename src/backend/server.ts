@@ -15,6 +15,7 @@ import { fileURLToPath } from 'url';
 import { categoryRoutes } from './routes/category-routes.js';
 import { orderRoutes } from './routes/order-routes.js';
 import { profileRoutes } from './routes/profile-routes.js';
+import { addressRoutes } from './routes/address-routes.js';
 
 const server = fastify({
   logger: true
@@ -67,6 +68,7 @@ server.register(storefrontRoutes, { prefix: '/api' });
 server.register(categoryRoutes, { prefix: '/api' });
 server.register(orderRoutes, { prefix: '/api' });
 server.register(profileRoutes, { prefix: '/api' });
+server.register(addressRoutes, { prefix: '/api' });
 
 
 
