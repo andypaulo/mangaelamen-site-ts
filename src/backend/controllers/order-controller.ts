@@ -169,6 +169,7 @@ export const orderController = {
       totalPrice: order.totalPrice,
       status: order.status,
       createdAt: order.createdAt,
+      shippingAddress: formatShippingAddress(order),
       customer: {
         id: order.user?.id || order.userId,
         name: order.user?.name || 'Cliente',

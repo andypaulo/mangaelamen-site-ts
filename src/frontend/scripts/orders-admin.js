@@ -64,6 +64,59 @@ function getShortOrderId(uuid) {
   return '#' + clean.substring(0, 8).toUpperCase();
 }
 
+function formatCep(cep) {
+  const digits = String(cep || '').replace(/\D/g, '').slice(0, 8);
+  return digits.length > 5 ? `${digits.slice(0, 5)}-${digits.slice(5)}` : digits;
+}
+
+function buildShippingAddressRow(shippingAddress) {
+  const tr = document.createElement('tr');
+  tr.className = 'border-b border-[#ece8e1] bg-[#fcfbfa]';
+
+  const td = document.createElement('td');
+  td.colSpan = 7;
+  td.className = 'px-4 py-2.5 text-xs text-[#444]';
+
+  const wrapper = document.createElement('div');
+  wrapper.className = 'flex flex-wrap items-baseline gap-x-2 gap-y-1';
+
+  const label = document.createElement('span');
+  label.className = 'font-semibold uppercase tracking-wide text-[11px] text-[#777]';
+  label.textContent = 'Entregar em:';
+  wrapper.appendChild(label);
+
+  if (!shippingAddress) {
+    const emptyEl = document.createElement('span');
+    emptyEl.className = 'italic text-[#888]';
+    emptyEl.textContent = 'Endereço não registrado';
+    wrapper.appendChild(emptyEl);
+    td.appendChild(wrapper);
+    tr.appendChild(td);
+    return tr;
+  }
+
+  const recipientEl = document.createElement('span');
+  recipientEl.className = 'font-semibold text-[#111] break-words';
+  recipientEl.textContent = shippingAddress.recipientName;
+  wrapper.appendChild(recipientEl);
+
+  const separator = document.createElement('span');
+  separator.className = 'text-[#bbb]';
+  separator.textContent = '•';
+  wrapper.appendChild(separator);
+
+  const addressEl = document.createElement('span');
+  addressEl.className = 'text-[#333] break-words';
+  const complementPart = shippingAddress.complement ? ` — ${shippingAddress.complement}` : '';
+  const neighborhoodPart = shippingAddress.neighborhood ? `, ${shippingAddress.neighborhood}` : '';
+  addressEl.textContent = `${shippingAddress.street}, ${shippingAddress.number}${complementPart}${neighborhoodPart} — ${shippingAddress.city}/${shippingAddress.state} • CEP ${formatCep(shippingAddress.cep)}`;
+  wrapper.appendChild(addressEl);
+
+  td.appendChild(wrapper);
+  tr.appendChild(td);
+  return tr;
+}
+
 function showFlash(type, message) {
   const successEl = document.getElementById('flashSuccess');
   const errorEl = document.getElementById('flashError');
@@ -154,6 +207,13 @@ function renderOrdersTable(orders) {
       </tr>
     `;
   }).join('');
+
+  orders.forEach((order) => {
+    const orderRow = tbody.querySelector(`tr[data-order-id="${order.id}"]`);
+    if (orderRow) {
+      orderRow.after(buildShippingAddressRow(order.shippingAddress));
+    }
+  });
 
   attachButtonEvents();
 }
