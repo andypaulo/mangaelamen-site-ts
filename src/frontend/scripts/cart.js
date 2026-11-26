@@ -36,15 +36,32 @@ let userAddresses = [];
 let selectedAddressId = null;
 let addressesLoaded = false;
 let isCheckingOut = false;
+const pendingItemIds = new Set();
 
 function formatCep(cep) {
   const digits = String(cep || '').replace(/\D/g, '').slice(0, 8);
   return digits.length > 5 ? `${digits.slice(0, 5)}-${digits.slice(5)}` : digits;
 }
 
+function setItemControlsDisabled(produtoId, disabled) {
+  const selectors = [
+    `.quantidade-input[data-produto-id="${produtoId}"]`,
+    `.btn-diminuir[data-produto-id="${produtoId}"]`,
+    `.btn-aumentar[data-produto-id="${produtoId}"]`,
+    `.btn-excluir[data-produto-id="${produtoId}"]`,
+  ];
+  selectors.forEach((sel) => {
+    const el = document.querySelector(sel);
+    if (el) {
+      el.disabled = disabled;
+    }
+  });
+}
+
 function updateCheckoutButtonState() {
   if (!elements.btnFinalizar) return;
-  elements.btnFinalizar.disabled = !hasCartItems || !selectedAddressId || isCheckingOut;
+  elements.btnFinalizar.disabled =
+    !hasCartItems || !selectedAddressId || isCheckingOut || pendingItemIds.size > 0;
 }
 
 function renderShippingAddresses() {
@@ -375,6 +392,9 @@ function configurarEventosItens() {
   document.querySelectorAll('.quantidade-input').forEach((input) => {
     input.addEventListener('change', async function () {
       const produtoId = Number(this.getAttribute('data-produto-id'));
+      if (pendingItemIds.has(produtoId)) return;
+
+      const previousValue = parseInt(this.defaultValue, 10) || 1;
       let novaQtd = parseInt(this.value, 10);
 
       if (isNaN(novaQtd) || novaQtd < 1) {
@@ -382,7 +402,7 @@ function configurarEventosItens() {
         this.value = '1';
       }
 
-      await alterarQuantidade(produtoId, novaQtd);
+      await alterarQuantidade(produtoId, novaQtd, previousValue);
     });
   });
 
@@ -390,13 +410,15 @@ function configurarEventosItens() {
   document.querySelectorAll('.btn-diminuir').forEach((btn) => {
     btn.addEventListener('click', async function () {
       const produtoId = Number(this.getAttribute('data-produto-id'));
+      if (pendingItemIds.has(produtoId)) return;
+
       const input = document.querySelector(`.quantidade-input[data-produto-id="${produtoId}"]`);
       if (!input) return;
 
       const atual = parseInt(input.value, 10) || 1;
       if (atual > 1) {
         input.value = String(atual - 1);
-        await alterarQuantidade(produtoId, atual - 1);
+        await alterarQuantidade(produtoId, atual - 1, atual);
       }
     });
   });
@@ -405,12 +427,14 @@ function configurarEventosItens() {
   document.querySelectorAll('.btn-aumentar').forEach((btn) => {
     btn.addEventListener('click', async function () {
       const produtoId = Number(this.getAttribute('data-produto-id'));
+      if (pendingItemIds.has(produtoId)) return;
+
       const input = document.querySelector(`.quantidade-input[data-produto-id="${produtoId}"]`);
       if (!input) return;
 
       const atual = parseInt(input.value, 10) || 1;
       input.value = String(atual + 1);
-      await alterarQuantidade(produtoId, atual + 1);
+      await alterarQuantidade(produtoId, atual + 1, atual);
     });
   });
 
@@ -418,14 +442,24 @@ function configurarEventosItens() {
   document.querySelectorAll('.btn-excluir').forEach((btn) => {
     btn.addEventListener('click', async function () {
       const produtoId = Number(this.getAttribute('data-produto-id'));
+      if (pendingItemIds.has(produtoId)) return;
       await excluirItem(produtoId);
     });
   });
+
+  // Preserva bloqueio visual em itens que ainda tenham mutação pendente
+  pendingItemIds.forEach((id) => setItemControlsDisabled(id, true));
 }
 
 // ==================== REGRAS DE ALTERAÇÃO E EXCLUSÃO ====================
-async function alterarQuantidade(produtoId, novaQuantidade) {
+async function alterarQuantidade(produtoId, novaQuantidade, previousValue = 1) {
+  if (pendingItemIds.has(produtoId)) return;
+
+  pendingItemIds.add(produtoId);
+  setItemControlsDisabled(produtoId, true);
+  updateCheckoutButtonState();
   hideAlert();
+
   try {
     const response = await fetch('/api/cart/alterar', {
       method: 'POST',
@@ -437,22 +471,37 @@ async function alterarQuantidade(produtoId, novaQuantidade) {
       await carregarCarrinho();
     } else {
       const data = await response.json().catch(() => ({}));
-      showAlert(data.message || 'Erro ao atualizar quantidade. Verifique o estoque disponível.');
+      const errorMsg = data.message || 'Erro ao atualizar quantidade. Verifique o estoque disponível.';
+      const input = document.querySelector(`.quantidade-input[data-produto-id="${produtoId}"]`);
+      if (input) input.value = String(previousValue);
       await carregarCarrinho();
+      showAlert(errorMsg);
     }
   } catch (error) {
     console.error('Erro ao atualizar quantidade:', error);
-    showAlert('Erro de conexão ao atualizar quantidade.');
+    const input = document.querySelector(`.quantidade-input[data-produto-id="${produtoId}"]`);
+    if (input) input.value = String(previousValue);
     await carregarCarrinho();
+    showAlert('Erro de conexão ao atualizar quantidade.');
+  } finally {
+    pendingItemIds.delete(produtoId);
+    setItemControlsDisabled(produtoId, false);
+    updateCheckoutButtonState();
   }
 }
 
 async function excluirItem(produtoId) {
+  if (pendingItemIds.has(produtoId)) return;
+
   if (!confirm('Tem certeza que deseja remover este item do carrinho?')) {
     return;
   }
 
+  pendingItemIds.add(produtoId);
+  setItemControlsDisabled(produtoId, true);
+  updateCheckoutButtonState();
   hideAlert();
+
   try {
     const response = await fetch('/api/cart/excluir', {
       method: 'POST',
@@ -469,13 +518,17 @@ async function excluirItem(produtoId) {
   } catch (error) {
     console.error('Erro ao excluir item:', error);
     showAlert('Erro na comunicação com o servidor.');
+  } finally {
+    pendingItemIds.delete(produtoId);
+    setItemControlsDisabled(produtoId, false);
+    updateCheckoutButtonState();
   }
 }
 
 // ==================== FINALIZAR COMPRA ====================
 if (elements.btnFinalizar) {
   elements.btnFinalizar.addEventListener('click', async function () {
-    if (isCheckingOut) return;
+    if (isCheckingOut || pendingItemIds.size > 0) return;
 
     if (!selectedAddressId) {
       showAlert('Selecione um endereço de entrega antes de finalizar a compra.');
