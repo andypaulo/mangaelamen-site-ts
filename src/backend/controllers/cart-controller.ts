@@ -274,6 +274,15 @@ export const cartController = {
 
   async checkout(request: FastifyRequest, reply: FastifyReply) {
     const userId = request.user.id;
+    const rawBody = request.body as { addressId?: unknown } | undefined | null;
+    const addressId =
+      rawBody && typeof rawBody === 'object' && typeof rawBody.addressId === 'string'
+        ? rawBody.addressId.trim()
+        : '';
+
+    if (!addressId) {
+      throw new AppError('Selecione um endereço de entrega.', 400);
+    }
 
     const cart = await prisma.cart.findUnique({
       where: { userId },
@@ -285,6 +294,14 @@ export const cartController = {
     }
 
     const order = await prisma.$transaction(async (tx) => {
+      const shippingAddress = await tx.address.findFirst({
+        where: { id: addressId, userId }
+      });
+
+      if (!shippingAddress) {
+        throw new AppError('Endereço de entrega não encontrado ou indisponível.', 400);
+      }
+
       let totalOrderPrice = 0;
       const orderItemsData = [];
 
@@ -329,6 +346,14 @@ export const cartController = {
           userId,
           totalPrice: Number(totalOrderPrice.toFixed(2)),
           status: 'CONFIRMED',
+          shipToName: shippingAddress.recipientName,
+          shipToCep: shippingAddress.cep,
+          shipToStreet: shippingAddress.street,
+          shipToNumber: shippingAddress.number,
+          shipToComplement: shippingAddress.complement || '',
+          shipToNeighborhood: shippingAddress.neighborhood,
+          shipToCity: shippingAddress.city,
+          shipToState: shippingAddress.state,
           items: { createMany: { data: orderItemsData } },
           statusEvents: {
             create: [

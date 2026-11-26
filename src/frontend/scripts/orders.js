@@ -217,6 +217,59 @@ function renderOrderCard(order) {
   `;
 }
 
+function formatCep(cep) {
+  const digits = String(cep || '').replace(/\D/g, '').slice(0, 8);
+  return digits.length > 5 ? `${digits.slice(0, 5)}-${digits.slice(5)}` : digits;
+}
+
+function buildShippingAddressBlock(shippingAddress) {
+  const container = document.createElement('div');
+  container.className = 'pt-4 mt-1 border-t border-[#f0ece6] flex flex-col gap-1';
+
+  const heading = document.createElement('h3');
+  heading.className = 'text-xs font-bold text-[#8a8793] uppercase tracking-wider mb-1';
+  heading.textContent = 'Entregar em';
+  container.appendChild(heading);
+
+  if (!shippingAddress) {
+    const emptyText = document.createElement('p');
+    emptyText.className = 'text-xs text-[#727785] italic';
+    emptyText.textContent = 'Endereço não registrado';
+    container.appendChild(emptyText);
+    return container;
+  }
+
+  const recipientEl = document.createElement('p');
+  recipientEl.className = 'text-sm font-semibold text-[#111215] break-words';
+  recipientEl.textContent = shippingAddress.recipientName;
+  container.appendChild(recipientEl);
+
+  const line1 = document.createElement('p');
+  line1.className = 'text-xs text-[#3c3b42] break-words';
+  const complementPart = shippingAddress.complement ? ` — ${shippingAddress.complement}` : '';
+  line1.textContent = `${shippingAddress.street}, ${shippingAddress.number}${complementPart}`;
+  container.appendChild(line1);
+
+  const line2 = document.createElement('p');
+  line2.className = 'text-xs text-[#5c5b64] break-words';
+  const neighborhoodPart = shippingAddress.neighborhood ? `${shippingAddress.neighborhood} — ` : '';
+  line2.textContent = `${neighborhoodPart}${shippingAddress.city}/${shippingAddress.state} • CEP ${formatCep(shippingAddress.cep)}`;
+  container.appendChild(line2);
+
+  return container;
+}
+
+function createOrderElement(order) {
+  const wrapper = document.createElement('div');
+  wrapper.innerHTML = renderOrderCard(order).trim();
+  const card = wrapper.firstElementChild;
+  if (card) {
+    card.appendChild(buildShippingAddressBlock(order.shippingAddress));
+    return card;
+  }
+  return wrapper;
+}
+
 async function carregarCompras() {
   const loadingEl = document.getElementById('ordersLoadingState');
   const unauthEl = document.getElementById('ordersUnauthenticatedState');
@@ -251,7 +304,10 @@ async function carregarCompras() {
       return;
     }
 
-    listEl.innerHTML = orders.map(renderOrderCard).join('');
+    listEl.innerHTML = '';
+    orders.forEach((order) => {
+      listEl.appendChild(createOrderElement(order));
+    });
   } catch (error) {
     console.error('Erro ao carregar compras:', error);
     loadingEl.classList.add('hidden');
@@ -259,5 +315,19 @@ async function carregarCompras() {
   }
 }
 
-document.addEventListener('DOMContentLoaded', carregarCompras);
-document.addEventListener('layoutReady', carregarCompras);
+// ==================== INICIALIZAÇÃO COM GUARD ====================
+let _ordersInitialized = false;
+
+async function initOrders() {
+  if (_ordersInitialized) return;
+  _ordersInitialized = true;
+  try {
+    await carregarCompras();
+  } catch (e) {
+    _ordersInitialized = false;
+    throw e;
+  }
+}
+
+document.addEventListener('DOMContentLoaded', initOrders);
+document.addEventListener('layoutReady', initOrders);

@@ -9,6 +9,32 @@ const STATUS_TRANSITIONS: Record<string, string> = {
   SHIPPED: 'DELIVERED',
 };
 
+function formatShippingAddress(order: {
+  shipToName: string | null;
+  shipToCep: string | null;
+  shipToStreet: string | null;
+  shipToNumber: string | null;
+  shipToComplement: string | null;
+  shipToNeighborhood: string | null;
+  shipToCity: string | null;
+  shipToState: string | null;
+}) {
+  if (!order.shipToName || !order.shipToCep || !order.shipToStreet || !order.shipToNumber || !order.shipToCity || !order.shipToState) {
+    return null;
+  }
+
+  return {
+    recipientName: order.shipToName,
+    cep: order.shipToCep,
+    street: order.shipToStreet,
+    number: order.shipToNumber,
+    complement: order.shipToComplement || '',
+    neighborhood: order.shipToNeighborhood || '',
+    city: order.shipToCity,
+    state: order.shipToState,
+  };
+}
+
 export const orderController = {
   /**
    * GET /api/orders
@@ -39,6 +65,7 @@ export const orderController = {
       totalPrice: order.totalPrice,
       status: order.status,
       createdAt: order.createdAt,
+      shippingAddress: formatShippingAddress(order),
       items: order.items.map((item) => ({
         id: item.id,
         productId: item.productId,
@@ -93,6 +120,7 @@ export const orderController = {
       totalPrice: order.totalPrice,
       status: order.status,
       createdAt: order.createdAt,
+      shippingAddress: formatShippingAddress(order),
       items: order.items.map((item) => ({
         id: item.id,
         productId: item.productId,

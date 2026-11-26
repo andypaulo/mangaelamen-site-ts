@@ -8,6 +8,7 @@ import { renderProfileHeader } from './profile-header.js';
 import { loadProfileSummary } from './profile-summary.js';
 import { initAccountForm } from './profile-account.js';
 import { initSecurityForm } from './profile-security.js';
+import { initAddressesSection } from './profile-addresses.js';
 
 let isInitialized = false;
 
@@ -48,6 +49,7 @@ async function initProfile() {
     initAccountForm(userData);
     initSecurityForm();
     await loadProfileSummary();
+    await initAddressesSection();
 
     loadingState.classList.add('hidden');
     content.classList.remove('hidden');
