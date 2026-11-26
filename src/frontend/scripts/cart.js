@@ -23,7 +23,161 @@ const elements = {
   alertBox: document.getElementById('cartAlert'),
   alertMessage: document.getElementById('cartAlertMessage'),
   alertClose: document.getElementById('cartAlertClose'),
+  shippingSection: document.getElementById('shippingAddressSection'),
+  shippingLoading: document.getElementById('shippingAddressLoading'),
+  shippingError: document.getElementById('shippingAddressError'),
+  shippingEmpty: document.getElementById('shippingAddressEmpty'),
+  shippingList: document.getElementById('shippingAddressList'),
+  btnRetryShipping: document.getElementById('btnRetryShippingAddresses'),
 };
+
+let hasCartItems = false;
+let userAddresses = [];
+let selectedAddressId = null;
+let addressesLoaded = false;
+let isCheckingOut = false;
+
+function formatCep(cep) {
+  const digits = String(cep || '').replace(/\D/g, '').slice(0, 8);
+  return digits.length > 5 ? `${digits.slice(0, 5)}-${digits.slice(5)}` : digits;
+}
+
+function updateCheckoutButtonState() {
+  if (!elements.btnFinalizar) return;
+  elements.btnFinalizar.disabled = !hasCartItems || !selectedAddressId || isCheckingOut;
+}
+
+function renderShippingAddresses() {
+  if (!elements.shippingList || !elements.shippingEmpty || !elements.shippingLoading || !elements.shippingError) return;
+
+  elements.shippingLoading.classList.add('hidden');
+  elements.shippingError.classList.add('hidden');
+  elements.shippingList.innerHTML = '';
+
+  if (userAddresses.length === 0) {
+    selectedAddressId = null;
+    elements.shippingList.classList.add('hidden');
+    elements.shippingEmpty.classList.remove('hidden');
+    updateCheckoutButtonState();
+    return;
+  }
+
+  elements.shippingEmpty.classList.add('hidden');
+  elements.shippingList.classList.remove('hidden');
+
+  const hasCurrentSelection = userAddresses.some((a) => a.id === selectedAddressId);
+  if (!hasCurrentSelection) {
+    const defaultAddr = userAddresses.find((a) => a.isDefault) || userAddresses[0];
+    selectedAddressId = defaultAddr ? defaultAddr.id : null;
+  }
+
+  userAddresses.forEach((addr) => {
+    const labelEl = document.createElement('label');
+    const isSelected = addr.id === selectedAddressId;
+    labelEl.className = `flex items-start gap-3 p-3.5 rounded-xl border cursor-pointer transition-all ${
+      isSelected
+        ? 'border-brandpink bg-[#fff9fc]'
+        : 'border-[#e8e4de] bg-[#fbf9f5] hover:border-[#d0cbc2]'
+    }`;
+
+    const radio = document.createElement('input');
+    radio.type = 'radio';
+    radio.name = 'shippingAddressId';
+    radio.value = addr.id;
+    radio.checked = isSelected;
+    radio.className = 'mt-1 accent-brandpink cursor-pointer focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brandpink';
+    radio.addEventListener('change', () => {
+      selectedAddressId = addr.id;
+      renderShippingAddresses();
+    });
+
+    const info = document.createElement('div');
+    info.className = 'flex flex-col gap-0.5 min-w-0 flex-1';
+
+    const headerRow = document.createElement('div');
+    headerRow.className = 'flex flex-wrap items-center gap-2';
+
+    const nameSpan = document.createElement('span');
+    nameSpan.className = 'font-poppins font-semibold text-sm text-[#111215] break-words';
+    nameSpan.textContent = addr.recipientName;
+    headerRow.appendChild(nameSpan);
+
+    if (addr.label) {
+      const labelBadge = document.createElement('span');
+      labelBadge.className = 'text-[10px] font-semibold uppercase tracking-wider px-2 py-0.5 rounded-full bg-[#ece8e1] text-[#5c5b64]';
+      labelBadge.textContent = addr.label;
+      headerRow.appendChild(labelBadge);
+    }
+
+    if (addr.isDefault) {
+      const defaultBadge = document.createElement('span');
+      defaultBadge.className = 'text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-brandpink text-white';
+      defaultBadge.textContent = 'Padrão';
+      headerRow.appendChild(defaultBadge);
+    }
+
+    info.appendChild(headerRow);
+
+    const line1 = document.createElement('span');
+    line1.className = 'text-xs text-[#3c3b42] break-words';
+    const complementPart = addr.complement ? ` — ${addr.complement}` : '';
+    line1.textContent = `${addr.street}, ${addr.number}${complementPart}`;
+    info.appendChild(line1);
+
+    const line2 = document.createElement('span');
+    line2.className = 'text-xs text-[#635f6d] break-words';
+    line2.textContent = `${addr.neighborhood} — ${addr.city}/${addr.state} • CEP ${formatCep(addr.cep)}`;
+    info.appendChild(line2);
+
+    labelEl.appendChild(radio);
+    labelEl.appendChild(info);
+    elements.shippingList.appendChild(labelEl);
+  });
+
+  updateCheckoutButtonState();
+}
+
+async function loadShippingAddresses() {
+  if (!elements.shippingSection) return;
+
+  if (elements.shippingLoading) elements.shippingLoading.classList.remove('hidden');
+  if (elements.shippingError) elements.shippingError.classList.add('hidden');
+  if (elements.shippingEmpty) elements.shippingEmpty.classList.add('hidden');
+  if (elements.shippingList) elements.shippingList.classList.add('hidden');
+
+  try {
+    const res = await fetch('/api/profile/addresses');
+    if (res.status === 401) {
+      addressesLoaded = false;
+      userAddresses = [];
+      selectedAddressId = null;
+      elements.shippingSection.classList.add('hidden');
+      updateCheckoutButtonState();
+      return;
+    }
+
+    if (!res.ok) {
+      throw new Error('Falha ao carregar endereços.');
+    }
+
+    const data = await res.json();
+    userAddresses = Array.isArray(data) ? data : [];
+    addressesLoaded = true;
+    renderShippingAddresses();
+  } catch (err) {
+    console.error('Erro ao buscar endereços:', err);
+    addressesLoaded = false;
+    userAddresses = [];
+    selectedAddressId = null;
+    if (elements.shippingLoading) elements.shippingLoading.classList.add('hidden');
+    if (elements.shippingError) elements.shippingError.classList.remove('hidden');
+    updateCheckoutButtonState();
+  }
+}
+
+if (elements.btnRetryShipping) {
+  elements.btnRetryShipping.addEventListener('click', loadShippingAddresses);
+}
 
 function showAlert(message, type = 'error') {
   if (!elements.alertBox) return;
@@ -57,10 +211,12 @@ export async function carregarCarrinho() {
     const response = await fetch('/api/cart');
 
     if (response.status === 401) {
+      hasCartItems = false;
       if (elements.loading) elements.loading.classList.add('hidden');
       if (elements.list) elements.list.innerHTML = '';
+      if (elements.shippingSection) elements.shippingSection.classList.add('hidden');
       if (elements.unauth) elements.unauth.classList.remove('hidden');
-      if (elements.btnFinalizar) elements.btnFinalizar.disabled = true;
+      updateCheckoutButtonState();
       atualizarResumo(0, 0);
       return;
     }
@@ -76,17 +232,29 @@ export async function carregarCarrinho() {
     if (elements.loading) elements.loading.classList.add('hidden');
 
     if (items.length === 0) {
+      hasCartItems = false;
       if (elements.list) elements.list.innerHTML = '';
+      if (elements.shippingSection) elements.shippingSection.classList.add('hidden');
       if (elements.empty) elements.empty.classList.remove('hidden');
-      if (elements.btnFinalizar) elements.btnFinalizar.disabled = true;
+      updateCheckoutButtonState();
       atualizarResumo(0, 0);
       return;
     }
 
+    hasCartItems = true;
     renderizarItens(items);
     const totalQuantidade = items.reduce((acc, i) => acc + i.quantidade, 0);
     atualizarResumo(total, totalQuantidade);
-    if (elements.btnFinalizar) elements.btnFinalizar.disabled = false;
+
+    if (elements.shippingSection) {
+      elements.shippingSection.classList.remove('hidden');
+      if (!addressesLoaded) {
+        await loadShippingAddresses();
+      } else {
+        renderShippingAddresses();
+      }
+    }
+    updateCheckoutButtonState();
   } catch (error) {
     console.error('Erro ao buscar carrinho:', error);
     if (elements.loading) elements.loading.classList.add('hidden');
@@ -307,10 +475,18 @@ async function excluirItem(produtoId) {
 // ==================== FINALIZAR COMPRA ====================
 if (elements.btnFinalizar) {
   elements.btnFinalizar.addEventListener('click', async function () {
+    if (isCheckingOut) return;
+
+    if (!selectedAddressId) {
+      showAlert('Selecione um endereço de entrega antes de finalizar a compra.');
+      return;
+    }
+
     if (!confirm('Deseja realmente finalizar a sua compra?')) {
       return;
     }
 
+    isCheckingOut = true;
     const btn = elements.btnFinalizar;
     const originalText = btn.innerHTML;
     btn.disabled = true;
@@ -321,14 +497,16 @@ if (elements.btnFinalizar) {
 
     try {
       const response = await fetch('/api/cart/checkout', {
-        method: 'POST'
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ addressId: selectedAddressId })
       });
 
       if (response.ok) {
         window.location.href = '/pages/orders/orders.html';
       } else {
         const data = await response.json().catch(() => ({}));
-        const erroMsg = data.message || (await response.text()) || 'Erro ao processar pedido.';
+        const erroMsg = data.message || 'Erro ao processar pedido.';
         showAlert('Atenção: ' + erroMsg);
         await carregarCarrinho();
       }
@@ -336,8 +514,9 @@ if (elements.btnFinalizar) {
       console.error('Erro ao finalizar compra:', error);
       showAlert('Erro ao processar comunicação com o servidor.');
     } finally {
-      btn.disabled = false;
+      isCheckingOut = false;
       btn.innerHTML = originalText;
+      updateCheckoutButtonState();
     }
   });
 }
