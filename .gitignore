@@ -9,3 +9,4 @@ prisma/database.db.bak
 src/backend/generated/
 dist/
 dist-front/
+.playwright-cli/
